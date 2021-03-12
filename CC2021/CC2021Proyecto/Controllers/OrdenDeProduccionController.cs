@@ -10,6 +10,7 @@ using Dominio.Entities.Enums;
 using Dominio.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace CC2021Proyecto.Controllers
@@ -53,21 +54,20 @@ namespace CC2021Proyecto.Controllers
                     }
                 }
                 var OrdenIniciarViewModel = new OrdenIniciarViewModel
-            {
+                {
                 Colores = colores,
                 Lineas = lineasDisponibles,
-                Modelos = modelos
-            };
+                Modelos = modelos,
+                };
 
-                ViewBag.ListPrueba = colores;
+                
             return View(OrdenIniciarViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CrearOrden(int numeroLinea, int numeroOrden,
-            string codigoModelo, int numeroColor)
+        public async Task<IActionResult> CrearOrden(OrdenIniciarViewModel model)
         {
-            var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
+            /*var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
                 
 
             var specLinea = new LineaConNumeroSpecification(numeroLinea);
@@ -99,11 +99,9 @@ namespace CC2021Proyecto.Controllers
                     {
                         _unitOfWork.Repository<LineaDeTrabajo>().Update(linea);
                         await _unitOfWork.Complete();
-
-                        return View(linea);
                     }
                 }
-            }
+            }*/
 
             return RedirectToAction("ObtenerLineas");
         }

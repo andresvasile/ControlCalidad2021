@@ -156,7 +156,6 @@ C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Vi
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Colores\Crear.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\OrdenDeProduccion\IniciarNuevaOrden.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\OrdenDeProduccion\ObtenerLineas.cshtml.g.cs
-C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\OrdenDeProduccion\CrearOrden.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Asociar\IniciarAsociacion.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\ControlCalidad\IniciarInspeccion.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Usuarios\Autenticacion.cshtml.g.cs
@@ -170,3 +169,4 @@ C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Vi
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Modelos\List.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\GestionAdmin\_ViewStart.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Shared\_LayoutAdmin.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Prueba\Index.cshtml.g.cs
