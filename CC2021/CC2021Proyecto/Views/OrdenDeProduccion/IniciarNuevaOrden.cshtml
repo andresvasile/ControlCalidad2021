@@ -7,7 +7,8 @@
     <div class="container">
 
         @using (Html.BeginForm("CrearOrden", "OrdenDeProduccion", FormMethod.Post, new { @class
-         = "form-group d-flex align-items-center justify-content-center " })) {
+= "form-group d-flex align-items-center justify-content-center " }))
+        {
             <div class="container border border-primary align-items-center p-4 my-4">
                 <div class="container mx-auto w-50">
                     <label for="">Numero de orden:</label>
@@ -17,51 +18,43 @@
                     <div class="d-flex flex-row justify-content-between">
 
                         <div class="dropdown align-self-center">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Modelo
-                            </button>
-                            <select class="custom-select custom-select mb-3">
-                                @foreach (var modelo in Model.Modelos)
-                                {
-                                    
-                                    <option name="codigoModelo" id="codigoModelo" class="dropdown-item">@modelo.Denominacion</option>
-                                    <option value="1">One</option>
-                                }
-                            </select>
-                        </div>
 
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Color
-                            </button>
-
-                            <select asp-for="Colores" id="@Model.Colores" class=" custom-select custom-select mb-3"></select>
-                                @foreach (var color in Model.Colores)
+                            <div class="dropdown">
+                                @Html.DropDownListFor(x => x.ColorSelected, new SelectList(Model.Coloress, "Codigo", "Descripcion"), "--select--", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle" })
+                                @for (int i = 0; i < Model.Coloress.Count; i++)
                                 {
-                                    <option value="123" name="numeroColor" id="numeroColor" class="dropdown-item">@color.Descripcion</option>
+                                    <input type="hidden" name="@Model.Coloress[i].Descripcion" value="@Model.Coloress[i].Descripcion" />
+
+
                                 }
-                            
+                            </div>
+                            <div class="dropdown">
+                                @Html.DropDownListFor(x => x.ModeloSelected, new SelectList(Model.Modeloss, "Sku", "Denominacion"), "--select--", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle" })
+                                @for (int i = 0; i < Model.Modeloss.Count; i++)
+                                {
+                                    <input type="hidden" name="@Model.Modeloss[i].Denominacion" value="@Model.Modeloss[i].Denominacion" />
+
+
+                                }
+
                             </div>
 
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Numero de linea
-                            </button>
-                            <select class="custom-select custom-select mb-3">
-                                @foreach (var linea in Model.Lineas)
+                            <div class="dropdown">
+                                @Html.DropDownListFor(x => x.LineaSelected, new SelectList(Model.Lineass, "Id", "Numero"), "--select--", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle" })
+                                @for (int i = 0; i < Model.Lineass.Count; i++)
                                 {
-                                   
-                                    <option name="numeroLinea" id="numeroLinea" class="dropdown-item">@linea.Numero</option>
-                                    <option value="1">One</option>
-                                }
-                            </select>
-                        </div>
+                                    <input type="hidden" name="@Model.Lineass[i].Numero" value="@Model.Lineass[i].Numero" />
 
-                    </div>
+
+                                }
+                                </div>
+                            </div>
+
+                        </div>
                 </div>
             </div>
             <div class="d-flex">
-                <button type="submit" class='btn btn-primary btn-sm' style="width: 10vw;">Crear</button>
+                <button type="submit" value="submit" class='btn btn-primary btn-sm' style="width: 10vw;">Crear</button>
                 <button class='btn btn-primary btn-sm ml-auto' style="width: 10vw;">Salir</button>
             </div>
             

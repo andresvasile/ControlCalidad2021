@@ -7,3 +7,12 @@ C:\Users\USUARIO\source\repos\CC\CC2021\Dominio\bin\Debug\netcoreapp3.1\Dominio.
 C:\Users\USUARIO\source\repos\CC\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.dll
 C:\Users\USUARIO\source\repos\CC\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.pdb
 C:\Users\USUARIO\source\repos\CC\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.csprojAssemblyReference.cache
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.dll
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.pdb
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\bin\Debug\netcoreapp3.1\Dominio.deps.json
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\bin\Debug\netcoreapp3.1\Dominio.dll
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\bin\Debug\netcoreapp3.1\Dominio.pdb
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.csprojAssemblyReference.cache
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.AssemblyInfoInputs.cache
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.AssemblyInfo.cs
+D:\RepositorioVS\ControlCalidad2021\CC2021\Dominio\obj\Debug\netcoreapp3.1\Dominio.csproj.CoreCompileInputs.cache

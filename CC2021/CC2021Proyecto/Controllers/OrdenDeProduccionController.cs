@@ -58,25 +58,40 @@ namespace CC2021Proyecto.Controllers
                 Colores = colores,
                 Lineas = lineasDisponibles,
                 Modelos = modelos,
+<<<<<<< HEAD
                 };
 
                 
+=======
+                Coloress = colores,
+                Modeloss=modelos,
+                Lineass= lineasDisponibles
+                };
+
+>>>>>>> 5ea75cbb28bee9067aac1dff96635c04a71473ae
             return View(OrdenIniciarViewModel);
         }
 
         [HttpPost]
+<<<<<<< HEAD
         public async Task<IActionResult> CrearOrden(OrdenIniciarViewModel model)
         {
             /*var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
+=======
+        public async Task<IActionResult> CrearOrden(OrdenIniciarViewModel orden, int numeroOrden)
+        {
+            
+            var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
+>>>>>>> 5ea75cbb28bee9067aac1dff96635c04a71473ae
                 
 
-            var specLinea = new LineaConNumeroSpecification(numeroLinea);
+            var specLinea = new LineaConNumeroSpecification(Int32.Parse(orden.LineaSelected));
             var linea = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
 
-            var specModelo = new ModeloConNumeroSpecification(codigoModelo);
+            var specModelo = new ModeloConNumeroSpecification(orden.ModeloSelected);
             var modelo = await _unitOfWork.Repository<Modelo>().GetEntityWithSpec(specModelo);
 
-            var specColor = new ColorConNumeroSpecification(numeroColor);
+            var specColor = new ColorConNumeroSpecification(Int32.Parse(orden.ColorSelected));
             var color = await _unitOfWork.Repository<Color>().GetEntityWithSpec(specColor);
 
             var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
@@ -99,6 +114,10 @@ namespace CC2021Proyecto.Controllers
                     {
                         _unitOfWork.Repository<LineaDeTrabajo>().Update(linea);
                         await _unitOfWork.Complete();
+<<<<<<< HEAD
+=======
+                        return View("ObtenerLineas");
+>>>>>>> 5ea75cbb28bee9067aac1dff96635c04a71473ae
                     }
                 }
             }*/

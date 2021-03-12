@@ -16,7 +16,9 @@ namespace Dominio.Entities
         {
             get => _empleado;
             set
+
             {
+                Empleado = value;
                 if (Empleado.Rol == TipoEmpleado.SupervisorDeLinea)
                 {
                     _empleado = value;

@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "6dCWUJxvbPxctwxFfkBHhMO0SoXj/+8dqL5masYASIBMhGYFa3t0JRFJiw/HX38McU+aR2ly5xRmW53GJgmCJQ==",
+  "dgSpecHash": "vQCcVBvsHoWQFsln/rn4Ahj3opn7GB1Xl/82Bplf+UEIn3EUk58FFP7MEtuhLmMy5xg/Qcu2kqRrsCPCVl9bcA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\USUARIO\\source\\repos\\CC\\CC2021\\Dominio\\Dominio.csproj",
+  "projectFilePath": "D:\\RepositorioVS\\ControlCalidad2021\\CC2021\\Dominio\\Dominio.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\USUARIO\\.nuget\\packages\\macross.json.extensions\\1.5.0\\macross.json.extensions.1.5.0.nupkg.sha512",
-    "C:\\Users\\USUARIO\\.nuget\\packages\\system.text.json\\4.7.0\\system.text.json.4.7.0.nupkg.sha512"
+    "C:\\Users\\lenov\\.nuget\\packages\\macross.json.extensions\\1.5.0\\macross.json.extensions.1.5.0.nupkg.sha512",
+    "C:\\Users\\lenov\\.nuget\\packages\\system.text.json\\4.7.0\\system.text.json.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }
