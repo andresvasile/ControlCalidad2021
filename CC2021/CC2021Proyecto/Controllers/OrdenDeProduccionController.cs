@@ -56,27 +56,29 @@ namespace CC2021Proyecto.Controllers
             {
                 Colores = colores,
                 Lineas = lineasDisponibles,
-                Modelos = modelos
-            };
+                Modelos = modelos,
+                Coloress = colores,
+                Modeloss=modelos,
+                Lineass= lineasDisponibles
+                };
 
-                ViewBag.ListPrueba = colores;
             return View(OrdenIniciarViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CrearOrden(int numeroLinea, int numeroOrden,
-            string codigoModelo, int numeroColor)
+        public async Task<IActionResult> CrearOrden(OrdenIniciarViewModel orden, int numeroOrden)
         {
+            
             var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
                 
 
-            var specLinea = new LineaConNumeroSpecification(numeroLinea);
+            var specLinea = new LineaConNumeroSpecification(Int32.Parse(orden.LineaSelected));
             var linea = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
 
-            var specModelo = new ModeloConNumeroSpecification(codigoModelo);
+            var specModelo = new ModeloConNumeroSpecification(orden.ModeloSelected);
             var modelo = await _unitOfWork.Repository<Modelo>().GetEntityWithSpec(specModelo);
 
-            var specColor = new ColorConNumeroSpecification(numeroColor);
+            var specColor = new ColorConNumeroSpecification(Int32.Parse(orden.ColorSelected));
             var color = await _unitOfWork.Repository<Color>().GetEntityWithSpec(specColor);
 
             var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
@@ -99,8 +101,7 @@ namespace CC2021Proyecto.Controllers
                     {
                         _unitOfWork.Repository<LineaDeTrabajo>().Update(linea);
                         await _unitOfWork.Complete();
-
-                        return View(linea);
+                        return View("ObtenerLineas");
                     }
                 }
             }
