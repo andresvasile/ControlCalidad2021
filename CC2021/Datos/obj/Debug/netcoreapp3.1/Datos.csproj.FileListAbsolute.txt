@@ -1,0 +1,15 @@
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.csprojAssemblyReference.cache
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.AssemblyInfoInputs.cache
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.AssemblyInfo.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.csproj.CoreCompileInputs.cache
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\bin\Debug\netcoreapp3.1\Datos.deps.json
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\bin\Debug\netcoreapp3.1\Datos.dll
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\bin\Debug\netcoreapp3.1\Datos.pdb
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\bin\Debug\netcoreapp3.1\Dominio.dll
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\bin\Debug\netcoreapp3.1\Dominio.pdb
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.csproj.CopyComplete
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.dll
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.pdb
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\bin\Debug\netcoreapp3.1\Datos.runtimeconfig.json
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\bin\Debug\netcoreapp3.1\Datos.runtimeconfig.dev.json
+C:\Users\USUARIO\source\repos\CC\CC2021\Datos\obj\Debug\netcoreapp3.1\Datos.genruntimeconfig.cache

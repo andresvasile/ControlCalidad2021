@@ -1,0 +1,69 @@
+﻿
+@using System.Linq.Expressions
+@using Dominio.Entities
+@model OrdenIniciarViewModel
+<!--App-->
+<div class="d-flex flex-column justify-content-center w-100 my-4">
+    <div class="container">
+
+        @using (Html.BeginForm("CrearOrden", "OrdenDeProduccion", FormMethod.Post, new { @class
+         = "form-group d-flex align-items-center justify-content-center " })) {
+            <div class="container border border-primary align-items-center p-4 my-4">
+                <div class="container mx-auto w-50">
+                    <label for="">Numero de orden:</label>
+                    <input name="numeroOrden" id="numeroOrden" class="form-control" type="text">
+                </div>
+                <div class="container w-50 justify-content-center my-4">
+                    <div class="d-flex flex-row justify-content-between">
+
+                        <div class="dropdown align-self-center">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Modelo
+                            </button>
+                            <select class="custom-select custom-select mb-3">
+                                @foreach (var modelo in Model.Modelos)
+                                {
+                                    <option name="codigoModelo" id="codigoModelo" class="dropdown-item">@modelo.Denominacion</option>
+                                    <option value="1">One</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Color
+                            </button>
+
+                            <select asp-for="Colores" id="@Model.Colores" class=" custom-select custom-select mb-3"></select>
+                                @foreach (var color in Model.Colores)
+                                {
+                                    <option value="123" name="numeroColor" id="numeroColor" class="dropdown-item">@color.Descripcion</option>
+                                }
+                            
+                            </div>
+
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Numero de linea
+                            </button>
+                            <select class="custom-select custom-select mb-3">
+                                @foreach (var linea in Model.Lineas)
+                                {
+                                   
+                                    <option name="numeroLinea" id="numeroLinea" class="dropdown-item">@linea.Numero</option>
+                                    <option value="1">One</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex">
+                <button type="submit" class='btn btn-primary btn-sm' style="width: 10vw;">Crear</button>
+                <button class='btn btn-primary btn-sm ml-auto' style="width: 10vw;">Salir</button>
+            </div>
+            
+        }
+</div>
+</div>

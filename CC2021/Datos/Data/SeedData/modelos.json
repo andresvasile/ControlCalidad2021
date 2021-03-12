@@ -1,0 +1,27 @@
+[
+  {
+    "Sku": "12a",
+    "Denominacion": "Nike",
+    "Objetivo": 300
+  },
+  {
+    "Sku": "13b",
+    "Denominacion": "Adidas",
+    "Objetivo": 400
+  },
+  {
+    "Sku": "14c",
+    "Denominacion": "Rebook",
+    "Objetivo": 350
+  },
+  {
+    "Sku": "15d",
+    "Denominacion": "Kike",
+    "Objetivo": 230
+  },
+  {
+    "Sku": "16e",
+    "Denominacion": "Adibas",
+    "Objetivo": 132
+  }
+]

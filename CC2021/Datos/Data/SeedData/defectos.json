@@ -1,0 +1,26 @@
+[
+  {
+    "TipoDefecto": "Reproceso",
+    "Descripcion": "Roto"
+  },
+  {
+    "TipoDefecto": "Reproceso",
+    "Descripcion": "Mal pegado"
+  },
+  {
+    "TipoDefecto": "Reproceso",
+    "Descripcion": "Descosido"
+  },
+  {
+    "TipoDefecto": "Observado",
+    "Descripcion": "Mal fijado"
+  },
+  {
+    "TipoDefecto": "Observado",
+    "Descripcion": "Mal hecho"
+  },
+  {
+    "TipoDefecto": "Observado",
+    "Descripcion": "Deformado"
+  }
+]

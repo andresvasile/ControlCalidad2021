@@ -1,0 +1,20 @@
+﻿@model CC2021Proyecto.ValidationClass.ColorValidation
+<div class="container my-4">
+    <h1>Colores</h1>
+    <div class="container border border-primary py-5 d-flex flex-column align-items-center my-4">
+        <form asp-action="Crear" method="post" class="form-group w-100 d-flex flex-column align-items-center">
+            <div asp-validation-summary="All"></div>
+            <label asp-for="Codigo">Codigo</label>
+                <input asp-for="Codigo" class="form-control w-25 mb-4">
+                <span asp-validation-for="Codigo" class="danger"></span>
+                <label asp-for="Descripcion">Descripcion</label>
+                <textarea asp-for="Descripcion" class="form-control w-50" style="height: 100px"></textarea>
+                <span asp-validation-for="Descripcion" class="danger"></span>
+                <div class="container d-flex justify-content-center mt-4">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <a asp-action="Index" asp-controller="Colores" type="button" class="btn btn-secondary form-cotrol">Cerrar</a>
+            </div>
+
+        </form>
+    </div>
+</div>

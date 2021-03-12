@@ -1,0 +1,49 @@
+.container-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 15vw;
+  height: 91vh;
+  border-right: 1px solid rgba(116, 116, 116, 0.2);
+  z-index: 10;
+}
+
+.itemMenu {
+  border-bottom: 1px solid rgba(116, 116, 116, 0.2);
+  width: 15vw;
+  text-decoration: none;
+  padding: 25px 10px 15px 10px;
+  text-align: center;
+}
+
+.itemMenu:hover {
+  text-decoration: none;
+  background-color: rgba(116, 116, 116, 0.01);
+}
+
+.inicio {
+  display: flex;
+}
+
+.container-app {
+  display: block;
+}
+
+.app {
+  border: 2px solid black;
+  width: auto;
+  height: 65vh;
+  margin-top: 50px;
+  overflow: scroll;
+}
+
+.search {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding-top: 15px;
+}
+
+.danger {
+    text-shadow: red;
+}

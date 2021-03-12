@@ -1,0 +1,52 @@
+﻿@model ModelosListViewModel
+<div class="container text-center mt-4">
+    <h1>Modelos</h1>
+    <div class="container border border-primary overflow-auto h-75">
+        <div class="container">
+            <ul class="pagination pagination-lg ml-2 mt-2">
+                <li class="page-item">
+                    <a asp-controller="Modelos" asp-action="Crear" class="page-link">
+                        <i class="bi bi-plus-circle"></i>
+                    </a>
+                    <span>Agregar</span>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex border border-left-0 border-right-0 border-primary">
+            <div class="container">
+                @using (Html.BeginForm("List", "Modelos", FormMethod.Post, new { @class
+                    = "form-group d-flex align-items-center justify-content-center " })) {
+                        <label class="pr-4">BUSCAR: </label>
+                        <input class="form-control w-25" type="text" name="filtro" id="filtro" />
+                        <button type="submit" class='btn btn-primary ml-2'><i class="bi bi-search"></i></button>
+                    }
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="w-25" scope="col">Sku</th>
+                <th scope="col">Denominacion</th>
+                <th>Objetivo</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var modelo in Model.Modelos) {
+                <tr>
+                    <th scope="row">@modelo.Sku</th>
+                    <td class='text-break'>@modelo.Denominacion</td>
+                    <td class='text-break'>@modelo.Objetivo</td>
+                    <td class='text-break'>
+                        <a asp-controller="Modelos" asp-action="Edit" asp-route-sku="@modelo.Sku"><i class="bi bi-pencil"></i></a>
+                    </td>
+                    <td class='text-break'>
+                        <a asp-controller="Modelos" asp-action="Delete" asp-route-sku="@modelo.Sku"><i class="bi bi-dash-circle"></i></a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

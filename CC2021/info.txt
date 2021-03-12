@@ -1,0 +1,20 @@
+dotnet ef migrations add InitialCreate -o Data/Migrations
+
+dotnet ef migrations remove -p Datos -s CC2021Proyecto
+
+dotnet ef database update
+
+dotnet ef database drop -p Datos -s CC2021Proyecto
+
+dotnet ef migrations add IdentityInitial -p Datos -s CC2021Proyecto -o Identity/Migrations -c AppIdentityDbContext
+
+dotnet ef migrations remove -p Datos -s CC2021Proyecto -c AppIdentityDbContext
+
+datos
+ef
+sqlserver 
+
+api
+design
+
+version 5.0.3

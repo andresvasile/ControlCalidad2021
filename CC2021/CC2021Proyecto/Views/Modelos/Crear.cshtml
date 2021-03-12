@@ -1,0 +1,28 @@
+﻿@model CC2021Proyecto.ValidationClass.ModeloValidation
+<div class="container my-4">
+    <h1>Modelos</h1>
+    <div class="app d-flex flex-column justify-content-center my-4">
+        <form asp-action="Crear" method="post" class="form-group w-100 d-flex flex-column align-items-center">
+            <div asp-validation-summary="All"></div>
+
+                <label asp-for="Sku">Sku</label>
+                <input asp-for="Sku" class="form-control">
+                <span asp-validation-for="Sku" class="danger"></span>
+            
+                <label asp-for="Objetivo">Objetivo</label>
+                <input asp-for="Objetivo" class="form-control">
+                <span asp-validation-for="Objetivo" class="danger"></span>
+
+            
+                <label asp-for="Denominacion">Denominacion</label>
+                <textarea asp-for="Denominacion" class="form-control" style="height: 100px" placeholder="" id="floatingTextarea"></textarea>
+                <span asp-validation-for="Denominacion" class="danger"></span>
+
+                <div class="container d-flex justify-content-center mt-4">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <a asp-action="Index" asp-controller="Colores" type="button" class="btn btn-secondary">Cerrar</a>
+            </div>
+
+        </form>
+    </div>
+</div>

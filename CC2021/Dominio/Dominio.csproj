@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Interfaces\IColorRepository.cs" />
+    <Compile Remove="Interfaces\IModeloRepository.cs" />
+    <Compile Remove="Interfaces\IOrdenesRepository.cs" />
+    <Compile Remove="Specifications\OrdenConColoresYModelosSpecification.cs" />
+    <Compile Remove="Specifications\OrdenSpecParams.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Macross.Json.Extensions" Version="1.5.0" />
+  </ItemGroup>
+
+</Project>
