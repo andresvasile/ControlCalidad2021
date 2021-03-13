@@ -8,11 +8,11 @@ namespace Dominio.Entities
         public DateTime Inicio{ get; set; }
         public DateTime Fin { get; set; }
         public int OrdenDeProduccionId { get; set; }
-        public OrdenDeProduccion OrdenDeProduccion{ get; set; }
-        public Hermanado Hermanado{ get; set; }
-        public List<Hallazgo> Hallazgos{ get; set; }
-        public List<Primera> ParesPrimera{ get; set; }
-        public Turno Turno{ get; set; }
+        public virtual OrdenDeProduccion OrdenDeProduccion{ get; set; }
+        public virtual Hermanado Hermanado{ get; set; }
+        public virtual List<Hallazgo> Hallazgos{ get; set; }
+        public virtual List<Primera> ParesPrimera{ get; set; }
+        public virtual Turno Turno{ get; set; }
 
         public HorarioTrabajo()
         {

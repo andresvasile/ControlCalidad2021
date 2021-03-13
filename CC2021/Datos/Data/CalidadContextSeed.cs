@@ -144,9 +144,25 @@ namespace Datos.Data
                         };
                         context.Usuarios.Add(sergio);
 
-                        await context.SaveChangesAsync();
+                        var diego = new Usuario()
+                        {
+                            DisplayName = "Diego",
+                            User = "diego",
+                            Password = "Pa$$w0rd",
+                            Empleado = new Empleado()
+                            {
+                                Nombre = "Diego",
+                                Apellido = "Cos",
+                                Documento = 12312312,
+                                Email = "diego@gmail.com",
+                                Rol = (TipoEmpleado)Enum.Parse(typeof(TipoEmpleado), TipoEmpleado.SupervisorDeLinea.ToString())
+                            }
+                        };
+                        context.Usuarios.Add(diego);
+
+                    await context.SaveChangesAsync();
                 }
-                
+
             }
             catch (Exception ex)
             {

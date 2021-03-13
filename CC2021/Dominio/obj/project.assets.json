@@ -69,19 +69,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lenov\\.nuget\\packages\\": {}
+    "C:\\Users\\USUARIO\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\RepositorioVS\\ControlCalidad2021\\CC2021\\Dominio\\Dominio.csproj",
+      "projectUniqueName": "C:\\Users\\USUARIO\\source\\repos\\CC\\CC2021\\Dominio\\Dominio.csproj",
       "projectName": "Dominio",
-      "projectPath": "D:\\RepositorioVS\\ControlCalidad2021\\CC2021\\Dominio\\Dominio.csproj",
-      "packagesPath": "C:\\Users\\lenov\\.nuget\\packages\\",
-      "outputPath": "D:\\RepositorioVS\\ControlCalidad2021\\CC2021\\Dominio\\obj\\",
+      "projectPath": "C:\\Users\\USUARIO\\source\\repos\\CC\\CC2021\\Dominio\\Dominio.csproj",
+      "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\USUARIO\\source\\repos\\CC\\CC2021\\Dominio\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\lenov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\USUARIO\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -127,7 +131,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
       }
     }
   }

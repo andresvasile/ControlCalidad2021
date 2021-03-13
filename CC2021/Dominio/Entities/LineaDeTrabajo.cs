@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Dominio.Entities.Enums;
 
@@ -9,21 +10,13 @@ namespace Dominio.Entities
     public class LineaDeTrabajo : BaseEntity
     {
         public int Numero { get; set; }
-        public List<OrdenDeProduccion> OrdenesDeProduccion { get; set; }
+        public virtual List<OrdenDeProduccion> OrdenesDeProduccion { get; set; }
         private Empleado _empleado { get; set; }
 
         public Empleado Empleado
         {
-            get => _empleado;
-            set
-
-            {
-                Empleado = value;
-                if (Empleado.Rol == TipoEmpleado.SupervisorDeLinea)
-                {
-                    _empleado = value;
-                }
-            }
+            get;
+            set;
         }
 
         public LineaDeTrabajo()
@@ -48,7 +41,7 @@ namespace Dominio.Entities
             return false;
         }
 
-        public bool CrearOrden(int numeroOrden, Modelo modelo, Color color, Empleado empleado
+        public OrdenDeProduccion CrearOrden(int numeroOrden, Modelo modelo, Color color, Empleado empleado
             , List<Turno> turnos, in DateTime horaActual)
         {
             var turnoValidado = ValidarTurno(turnos, horaActual);
@@ -59,13 +52,13 @@ namespace Dominio.Entities
                     (numeroOrden, color, modelo, turnoValidado, this, horaActual);
 
                 this.OrdenesDeProduccion.Add(orden);
-                return true;
+                return orden;
             }
 
-            return false;
+            return null;
         }
 
-        private Turno ValidarTurno(List<Turno> turnos, in DateTime horaActual)
+        public Turno ValidarTurno(List<Turno> turnos, in DateTime horaActual)
         {
             foreach (var turno in turnos)
             {
@@ -74,26 +67,21 @@ namespace Dominio.Entities
                 if (turnoValido) return turno;
 
             }
-
             return null;
         }
 
         public void PausarOrden(DateTime horaActual, OrdenDeProduccion orden)
         {
-            foreach (var o in OrdenesDeProduccion)
+            var o = OrdenesDeProduccion.SingleOrDefault(o => o.Numero == orden.Numero);
+            if (o != null)
             {
-                if (o.Numero == orden.Numero)
-                {
-                    o.PausarOrden(horaActual);
-                }
+                o.PausarOrden(horaActual);
             }
-
+            
         }
 
         public void ReanudarOrden(List<Turno> turnos, in DateTime horaActual, OrdenDeProduccion orden)
         {
-
-
             foreach (var o in OrdenesDeProduccion)
             {
                 if (o.Numero == orden.Numero)
@@ -119,47 +107,58 @@ namespace Dominio.Entities
             }
         }
 
-        public OrdenDeProduccion ValidarSupervisor(OrdenDeProduccion orden, Empleado empleado)
+        public bool ValidarSupervisor(Empleado empleado)
         {
-            var ordenSupervisada = OrdenesDeProduccion.FirstOrDefault(x => (x.EmpleadoOrden == empleado && x.Estado == EstadoOrden.Activa) ||
-                                          (x.EmpleadoOrden == empleado && x.Estado == EstadoOrden.Pausada));
 
-            if (ordenSupervisada == null)
+            var oActiva = OrdenesDeProduccion
+                .Any(o =>
+                (o.Estado == EstadoOrden.Activa && o.EmpleadoOrden == null));
+
+            var oPausada = OrdenesDeProduccion
+                .Any(o =>
+                (o.Estado == EstadoOrden.Pausada && o.EmpleadoOrden != empleado));
+
+            if (oActiva || oPausada)
             {
-                foreach(var o in OrdenesDeProduccion)
-                {
-                    if (o.Numero == orden.Numero)
-                    {
-                        o.AsociarSupervisor(empleado);
-
-                        return o;
-                    }
-                }
-                
+                return true;
             }
-            return null;
+            return false;
         }
 
-        public OrdenDeProduccion DesasociarSupervisor(OrdenDeProduccion orden, Empleado empleado)
+        public bool ComprobarAsignacionSupervisor(Empleado empleado)
         {
-            var ordenParaDesasociar = OrdenesDeProduccion
-                .FirstOrDefault(x => x.Estado == EstadoOrden.Pausada && x.Numero == orden.Numero
-                && x.EmpleadoOrden==empleado);
+            var siEstanFinalizadas = ObtenerLineaSiEstaFinalizada(EstadoOrden.Finalizada);
 
-            if (ordenParaDesasociar != null)
+            var siEstaAsignadoAActivaOPausada = ObtenerSiEstaActivaOPausada(EstadoOrden.Pausada,EstadoOrden.Activa);
+
+            if (Empleado != null)
             {
-                foreach (var o in OrdenesDeProduccion)
+                if (Empleado.Id == empleado.Id)
                 {
-                    if (o.Numero == orden.Numero)
+                    if (siEstanFinalizadas && !siEstaAsignadoAActivaOPausada)
                     {
-                        o.DesasociarSupervisor(empleado);
-
-                        return o;
+                        return true;
                     }
+                    return false;
                 }
+                return true;
+            }
+            return true;
+        }
+
+        private bool ObtenerSiEstaActivaOPausada(EstadoOrden pausada, EstadoOrden activa)
+        {
+            if (OrdenesDeProduccion.Count == 0)
+            {
+                return true;
             }
 
-            return null;
+            if (OrdenesDeProduccion.Count > 0)
+            {
+                return OrdenesDeProduccion.Any(x => x.Estado == pausada || x.Estado == activa);
+            }
+
+            return false;
         }
     }
 }

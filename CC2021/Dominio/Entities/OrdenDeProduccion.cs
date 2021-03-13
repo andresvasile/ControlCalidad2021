@@ -13,30 +13,23 @@ namespace Dominio.Entities
         public int Numero{ get; set; }
         public DateTime FechaInicio{ get; set; }
         public DateTime FechaFin { get; set; }
-        public Empleado LineaIniciadaPor { get; set; }
+        public virtual Empleado LineaIniciadaPor { get; set; }
 
-        public Empleado EmpleadoOrden
+        public virtual Empleado EmpleadoOrden
         {
-            get { return _empleadoOrden;}
-
-            set
-            {
-                if (EmpleadoOrden.Rol == TipoEmpleado.SupervisorDeCalidad)
-                {
-                    _empleadoOrden = value;
-                }
-            }
+            get;
+            set;
         }
         private Empleado _empleadoOrden { get; set; }
-        public Color Color{ get; set; }
+        public virtual Color Color{ get; set; }
         public int ColorId{ get; set; }
-        public Modelo Modelo{ get; set; }
+        public virtual Modelo Modelo{ get; set; }
         public int Objetivo { get; set; }
         public int ModeloId { get; set; }
         public EstadoOrden Estado { get; set; }
-        public List<HorarioTrabajo> Horarios{ get; set; }
+        public virtual List<HorarioTrabajo> Horarios{ get; set; }
         public int LineaId { get; set; }
-        public LineaDeTrabajo Linea{ get; set; }
+        public virtual LineaDeTrabajo Linea{ get; set; }
         public OrdenDeProduccion()
         {
             
@@ -45,13 +38,16 @@ namespace Dominio.Entities
             , LineaDeTrabajo linea, DateTime horaActual)
         {
 
-            if (Horarios == null) Horarios = new List<HorarioTrabajo>();
+            if (Horarios == null)
+            {
+                Horarios = new List<HorarioTrabajo>();
+            }
 
             Numero = numeroOrden;
             Color = color;
             ColorId = color.Id;
             Estado = EstadoOrden.Activa;
-            FechaInicio = turnoValidado.Inicio;
+            FechaInicio = horaActual;
             Linea = linea;
             LineaId = linea.Id;
             LineaIniciadaPor = linea.Empleado;
@@ -66,6 +62,9 @@ namespace Dominio.Entities
         {
             Estado = EstadoOrden.Pausada;
             Horarios.Last().Fin = horaActual;
+            Horarios.Last().OrdenDeProduccion = this;
+            Horarios.Last().OrdenDeProduccionId = Id;
+
         }
 
         public void ReanudarOrden(Turno turnoValidado, in DateTime horaActual)
@@ -80,7 +79,8 @@ namespace Dominio.Entities
                 Turno = turnoValidado,
                 Inicio = horaActual,
                 OrdenDeProduccion = this,
-                OrdenDeProduccionId = this.Id
+                OrdenDeProduccionId = Id
+                
             };
             Horarios.Add(horarioNuevo);
         }
@@ -89,15 +89,12 @@ namespace Dominio.Entities
         {
             Estado = EstadoOrden.Finalizada;
             Horarios.Last().Fin = horaActual;
+            FechaFin = horaActual;
         }
 
         public void AsociarSupervisor(Empleado empleadoOrden) 
         {
-            if (EmpleadoOrden != null)
-            {
-                EmpleadoOrden = empleadoOrden;
-            }
-            
+            EmpleadoOrden = empleadoOrden;
         }
 
         public void DesasociarSupervisor(Empleado empleado)
@@ -108,21 +105,21 @@ namespace Dominio.Entities
             }
         }
 
-        public void AgregarParDePrimera(Primera primera)
+        public void AgregarParDePrimera(DateTime hora, int cantidad, Empleado empleado, List<HorarioTrabajo> horarios)
         {
-            var prim = new Primera
+            if (horarios.Last().ParesPrimera.Count > 0)
             {
-                EmpleadoDeCalidad = primera.EmpleadoDeCalidad,
-                Cantidad = primera.Cantidad,
-                Hora = primera.Hora
-            };
-            if (Horarios.Count > 0)
-            {
-                Horarios.LastOrDefault().ParesPrimera.Add(prim);
+                horarios.Last().ParesPrimera.Last().Cantidad++;
             }
             else
             {
-                throw new Exception("No hay horarios creados");
+                var prim = new Primera
+                {
+                    EmpleadoDeCalidad = empleado,
+                    Cantidad = cantidad,
+                    Hora = hora
+                };
+                horarios.Last().ParesPrimera.Add(prim);
             }
             
         }
@@ -137,23 +134,33 @@ namespace Dominio.Entities
             return false;
         }
 
-        public void AgregarDefecto(Hallazgo hallazgo)
+        public void AgregarDefecto(Hallazgo hallazgo, Defecto defecto, List<HorarioTrabajo> horarios)
         {
-            var hallaz = new Hallazgo()
+            var hallazgoConDefecto = horarios.Last().Hallazgos.SingleOrDefault(d => d.Defecto == defecto);
+            if (hallazgoConDefecto != null)
             {
-                EmpleadoDeCalidad = hallazgo.EmpleadoDeCalidad,
-                Cantidad = hallazgo.Cantidad,
-                Hora = hallazgo.Hora,
-                Defecto = hallazgo.Defecto,
-                TipoPie = hallazgo.TipoPie
-            };
-            if (Horarios.Count > 0)
-            {
-                Horarios.LastOrDefault().Hallazgos.Add(hallazgo);
+                hallazgoConDefecto.Cantidad++;
             }
             else
             {
-                throw new Exception("No hay horarios creados");
+                var hallaz = new Hallazgo()
+                {
+                    EmpleadoDeCalidad = hallazgo.EmpleadoDeCalidad,
+                    Hora = hallazgo.Hora,
+                    Defecto = defecto,
+                    Cantidad = hallazgo.Cantidad,
+                    TipoPie = hallazgo.TipoPie,
+
+                };
+                horarios.Last().Hallazgos.Add(hallaz);
+            }
+        }
+
+        public void RemoverParDePrimera( List<HorarioTrabajo> horarios)
+        {
+            if (horarios.Last().ParesPrimera.Count > 0)
+            {
+                horarios.Last().ParesPrimera.Last().Cantidad--;
             }
         }
     }

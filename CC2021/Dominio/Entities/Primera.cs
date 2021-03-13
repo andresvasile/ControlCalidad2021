@@ -8,18 +8,12 @@ namespace Dominio.Entities
         public DateTime Hora { get; set; }
         public int Cantidad { get; set; }
 
-        private Empleado _empleadoDeCalidad;
+        private  Empleado _empleadoDeCalidad;
 
-        public Empleado EmpleadoDeCalidad
+        public virtual Empleado EmpleadoDeCalidad
         {
-            get => _empleadoDeCalidad;
-            set
-            {
-                if (EmpleadoDeCalidad.Rol == TipoEmpleado.SupervisorDeCalidad)
-                {
-                    _empleadoDeCalidad = value;
-                }
-            }
+            get;
+            set;
         }
 
         public Primera()

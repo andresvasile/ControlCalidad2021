@@ -11,6 +11,7 @@ using Dominio.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace CC2021Proyecto.Controllers
@@ -23,16 +24,12 @@ namespace CC2021Proyecto.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> ObtenerLineas()
         {
-            var lineas = await _unitOfWork.Repository<LineaDeTrabajo>().ListAllAsync();
+            var spec = new AddOrdersIncludesSpecification();
+            var ordenes = await _unitOfWork.Repository<OrdenDeProduccion>().ListAsync(spec);
 
-            return View(lineas);
+            return View(ordenes);
         }
 
 
@@ -40,7 +37,8 @@ namespace CC2021Proyecto.Controllers
         {
             var colores = await _unitOfWork.Repository<Color>().ListAllAsync();
             var modelos = await _unitOfWork.Repository<Modelo>().ListAllAsync();
-            var lineas = await _unitOfWork.Repository<LineaDeTrabajo>().ListAllAsync();
+            var specLineas = new AddLineasIncludesSpecification();
+            var lineas = await _unitOfWork.Repository<LineaDeTrabajo>().ListAsync(specLineas);
             var estadoFinalizada = EstadoOrden.Finalizada;
             var lineasDisponibles = new List<LineaDeTrabajo>();
 
@@ -58,34 +56,20 @@ namespace CC2021Proyecto.Controllers
                 Colores = colores,
                 Lineas = lineasDisponibles,
                 Modelos = modelos,
-<<<<<<< HEAD
-                };
-
-                
-=======
                 Coloress = colores,
                 Modeloss=modelos,
                 Lineass= lineasDisponibles
                 };
 
->>>>>>> 5ea75cbb28bee9067aac1dff96635c04a71473ae
-            return View(OrdenIniciarViewModel);
+                return View(OrdenIniciarViewModel);
         }
 
         [HttpPost]
-<<<<<<< HEAD
-        public async Task<IActionResult> CrearOrden(OrdenIniciarViewModel model)
-        {
-            /*var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
-=======
         public async Task<IActionResult> CrearOrden(OrdenIniciarViewModel orden, int numeroOrden)
         {
-            
-            var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
->>>>>>> 5ea75cbb28bee9067aac1dff96635c04a71473ae
-                
+            var usuario = await ObtenerUsuario();
 
-            var specLinea = new LineaConNumeroSpecification(Int32.Parse(orden.LineaSelected));
+            var specLinea = new LineaConIdSpecification(Int32.Parse(orden.LineaSelected));
             var linea = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
 
             var specModelo = new ModeloConNumeroSpecification(orden.ModeloSelected);
@@ -94,96 +78,143 @@ namespace CC2021Proyecto.Controllers
             var specColor = new ColorConNumeroSpecification(Int32.Parse(orden.ColorSelected));
             var color = await _unitOfWork.Repository<Color>().GetEntityWithSpec(specColor);
 
-            var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
-            var usuario = await _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
-
             var turnos = await _unitOfWork.Repository<Turno>().ListAllAsync();
             var horaActual =  _unitOfWork.GetHora();
 
-
             var estadoFinalizada = EstadoOrden.Finalizada;
 
-            if (linea != null && modelo !=null && color != null)
+            var specLineas = new AddLineasIncludesSpecification();
+            var lineas = await _unitOfWork.Repository<LineaDeTrabajo>().ListAsync(specLineas);
+
+            int usuarioValidado = 0;
+
+            if (ModelState.IsValid)
             {
-                var lineaDisponible = linea.ObtenerLineaSiEstaFinalizada(estadoFinalizada);
-                if (lineaDisponible)
+                foreach (var li in lineas)
                 {
-                    var validado = 
-                        linea.CrearOrden(numeroOrden,modelo,color,usuario.Empleado,turnos,horaActual);
-                    if (validado)
+                    var validacionDeEmpleado = li.ComprobarAsignacionSupervisor(usuario.Empleado);
+                    if (validacionDeEmpleado)
                     {
-                        _unitOfWork.Repository<LineaDeTrabajo>().Update(linea);
-                        await _unitOfWork.Complete();
-<<<<<<< HEAD
-=======
-                        return View("ObtenerLineas");
->>>>>>> 5ea75cbb28bee9067aac1dff96635c04a71473ae
+                        usuarioValidado++;
                     }
                 }
-            }*/
 
+                if (linea != null && modelo != null && color != null && usuario != null && usuarioValidado==lineas.Count)
+                {
+                    var lineaDisponible = linea.ObtenerLineaSiEstaFinalizada(estadoFinalizada);
+                    if (lineaDisponible)
+                    {
+                        var spec = new OrdenConNumeroSpecification(numeroOrden);
+                        var ordenExistente = await _unitOfWork.Repository<OrdenDeProduccion>()
+                            .GetEntityWithSpec(spec);
+                        if (ordenExistente == null)
+                        {
+                            var ordenV =
+                                linea.CrearOrden(numeroOrden, modelo, color, usuario.Empleado, turnos, horaActual);
+                            if (ordenV != null)
+                            {
+                                _unitOfWork.Repository<LineaDeTrabajo>().Update(linea);
+                                await _unitOfWork.Complete();
+                            }
+                            ModelState.AddModelError("","Se debe crear la orden en un turno valido ");
+                        }
+                        ModelState.AddModelError("", "Orden ya existente, ingrese otra");
+                    }
+                    ModelState.AddModelError("", "Orden activa en linea" + linea.Numero + ", finalice la ultima para crear otra");
+                }
+            }
+           
             return RedirectToAction("ObtenerLineas");
         }
 
-        public async Task<IActionResult> PausarOrden(LineaDeTrabajo linea)
+        private async Task<Usuario> ObtenerUsuario()
         {
-            var specLinea = new LineaConNumeroSpecification(linea.Numero);
-            var lineaValida = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
+            var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
+            var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
+            var usuario = await _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
 
-            var specOrden = new OrdenConEstadoActivoSpecification(lineaValida,EstadoOrden.Activa);
-            var ordenActiva = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
-
-            var horaActual = _unitOfWork.GetHora();
-
-            if (lineaValida!=null && ordenActiva != null)
-            {
-                lineaValida.PausarOrden(horaActual, ordenActiva);
-                _unitOfWork.Repository<LineaDeTrabajo>().Update(lineaValida);
-                await _unitOfWork.Complete();
-            }
-
-            return RedirectToAction("ObtenerLineas");
-
+            return usuario;
         }
 
-        public async Task<IActionResult> ReanudarOrden(LineaDeTrabajo linea)
+        [HttpPost]
+        public async Task<IActionResult> PausarOrden(int numeroLinea)
         {
-            var specLinea = new LineaConNumeroSpecification(linea.Numero);
-            var lineaValida = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
+            var usuario = await ObtenerUsuario();
 
-            var specOrden = new OrdenConEstadoActivoSpecification(lineaValida, EstadoOrden.Activa);
-            var ordenActiva = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
-
-            var horaActual = _unitOfWork.GetHora();
-            var turnos = _unitOfWork.Repository<Turno>().ListAllAsync();
-            
-
-            if (lineaValida != null && ordenActiva != null && turnos != null)
+            if (usuario != null)
             {
-                lineaValida.ReanudarOrden(turnos.Result, horaActual, ordenActiva);
-                _unitOfWork.Repository<LineaDeTrabajo>().Update(lineaValida);
-                await _unitOfWork.Complete();
-            }
+                var specLinea = new LineaConNumeroYEmpleadoSpecification(numeroLinea, usuario.Empleado);
+                var lineaValida = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
 
+                if (lineaValida != null)
+                {
+                    var specOrden = new OrdenConEstadoABuscarSpecification(lineaValida, EstadoOrden.Activa);
+                    var ordenActiva = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
+
+                    var horaActual = _unitOfWork.GetHora();
+
+                    if (ordenActiva != null)
+                    {
+                        lineaValida.PausarOrden(horaActual, ordenActiva);
+                        await _unitOfWork.Complete();
+                    }
+                }
+            }
             return RedirectToAction("ObtenerLineas");
         }
 
-        public async Task<IActionResult> FinalizarOrden(LineaDeTrabajo linea)
+        public async Task<IActionResult> ReanudarOrden(int numeroLinea)
         {
-            var specLinea = new LineaConNumeroSpecification(linea.Numero);
-            var lineaValida = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
+            var usuario = await ObtenerUsuario();
 
-            var specOrden = new OrdenConEstadoActivoSpecification(lineaValida, EstadoOrden.Activa);
-            var ordenActiva = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
-
-            var horaActual = _unitOfWork.GetHora();
-
-            if (lineaValida != null && ordenActiva != null)
+            if (usuario != null)
             {
-                lineaValida.FinalizarOrden(horaActual, ordenActiva);
-                _unitOfWork.Repository<LineaDeTrabajo>().Update(lineaValida);
-                await _unitOfWork.Complete();
+                var specLinea = new LineaConNumeroYEmpleadoSpecification(numeroLinea, usuario.Empleado);
+                var lineaValida = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
+
+                if (lineaValida != null)
+                {
+                    var specOrden = new OrdenConEstadoABuscarSpecification(lineaValida, EstadoOrden.Pausada);
+                    var ordenActiva = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
+
+                    var horaActual = _unitOfWork.GetHora();
+                    var turnos = await _unitOfWork.Repository<Turno>().ListAllAsync();
+
+
+                    if (ordenActiva != null && turnos != null && usuario != null)
+                    {
+                        lineaValida.ReanudarOrden(turnos, horaActual, ordenActiva);
+                        await _unitOfWork.Complete();
+                    }
+                }
             }
+            return RedirectToAction("ObtenerLineas");
+        }
+
+        public async Task<IActionResult> FinalizarOrden(int numeroLinea)
+        {
+            var usuario = await ObtenerUsuario();
+
+            if (usuario != null)
+            {
+                var specLinea = new LineaConNumeroYEmpleadoSpecification(numeroLinea, usuario.Empleado);
+                var lineaValida = await _unitOfWork.Repository<LineaDeTrabajo>().GetEntityWithSpec(specLinea);
+                if (lineaValida != null)
+                {
+                    var specOrden = new OrdenesConOrdenActivaYPausadaConLineaSpecification(lineaValida);
+                    var ordenActivaOPausada = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
+
+                    var horaActual = _unitOfWork.GetHora();
+
+                    if (ordenActivaOPausada != null)
+                    {
+                        lineaValida.FinalizarOrden(horaActual, ordenActivaOPausada);
+                        await _unitOfWork.Complete();
+                    }
+                    ModelState.AddModelError("","Orden ya finalizada");
+                }
+            }
+
             return RedirectToAction("ObtenerLineas");
         }
     }

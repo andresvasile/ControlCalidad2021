@@ -8,6 +8,7 @@ using CC2021Proyecto.ValidationClass;
 using Dominio.Entities;
 using Dominio.Entities.Enums;
 using Dominio.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -36,13 +37,14 @@ namespace CC2021Proyecto.Controllers
             if (usuarioValidado != null)
             {
                 HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(usuarioValidado));
+
                 if (usuarioValidado.Empleado.Rol == TipoEmpleado.Administrativo)
                 {
-                    return RedirectToAction("Index", "GestionAdmin");
+                    return RedirectToAction("Index", "Colores");
                 }
                 if (usuarioValidado.Empleado.Rol == TipoEmpleado.SupervisorDeCalidad)
                 {
-                    return RedirectToAction("IniciarInspeccion", "ControlCalidad");
+                    return RedirectToAction("IniciarAsociacion", "Asociar");
                 }
                 if (usuarioValidado.Empleado.Rol == TipoEmpleado.SupervisorDeLinea)
                 {

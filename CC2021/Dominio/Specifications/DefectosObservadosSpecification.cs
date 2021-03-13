@@ -8,7 +8,7 @@ namespace API.Specifications
         public DefectosObservadosSpecification(TipoDefecto tipo) 
             : base(d=>d.TipoDefecto==tipo)
         {
-            
+           
         }
     }
 }

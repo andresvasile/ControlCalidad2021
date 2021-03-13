@@ -7,7 +7,7 @@ namespace API.Specifications
         public ValidarEmpleadoSpecification(string user)
         :base(u => u.User==user)
         {
-            
+            AddInclude(u=>u.Empleado);
         }
     }
 }

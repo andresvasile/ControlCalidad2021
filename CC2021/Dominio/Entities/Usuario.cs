@@ -7,6 +7,6 @@ namespace Dominio.Entities
         public string User{ get; set; }
         public string Password{ get; set; }
         public string DisplayName { get; set; }
-        public Empleado Empleado { get; set; }
+        public virtual Empleado Empleado { get; set; }
     }
 }

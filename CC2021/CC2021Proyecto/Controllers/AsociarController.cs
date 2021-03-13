@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using API.Specifications;
 using Dominio.Entities;
+using Dominio.Entities.Enums;
 using Dominio.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CC2021Proyecto.Controllers
 {
@@ -17,12 +21,6 @@ namespace CC2021Proyecto.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> IniciarAsociacion()
         {
             var spec = new OrdenesConOrdenActivaYPausadaSpecification();
@@ -36,58 +34,69 @@ namespace CC2021Proyecto.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AsociarSupervisor(int numeroOrden, string user)
+        public async Task<IActionResult> AsociarSupervisor(int numeroOrden)
         {
-            var specUsuario = new ValidarEmpleadoSpecification(user);
-            var usuario = _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
 
-            var specOrden = new OrdenConNumeroSpecification(numeroOrden);
-            var orden = _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
+            var usuario = await ObtenerUsuario();
 
-            var lineas = _unitOfWork.Repository<LineaDeTrabajo>().ListAllAsync();
+            var specOrden = new OrdenConEstadoActivaOPausadaYNumero(numeroOrden);
+            var orden = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
 
-            if (orden != null && usuario.Result.Empleado != null)
+            var specLineas = new AddLineasIncludesSpecification();
+            var lineas = await _unitOfWork.Repository<LineaDeTrabajo>().ListAsync(specLineas);
+
+            var supervisorValido = 0;
+            var hayActivasOPausadas = 0;
+
+            if (orden != null && usuario.Empleado != null && lineas != null)
             {
-                foreach (var linea in lineas.Result)
+                foreach (var linea in lineas)
                 {
-                    var ordenAsociada = linea.ValidarSupervisor(orden.Result, usuario.Result.Empleado);
-                    if (ordenAsociada != null)
+                    if (linea.OrdenesDeProduccion.All(o => o.Estado == EstadoOrden.Finalizada)) {}
+                    else
                     {
-                        _unitOfWork.Repository<OrdenDeProduccion>().Update(ordenAsociada);
-                        await _unitOfWork.Complete();
+                        hayActivasOPausadas++;
+                        var supervisorDispo = linea.ValidarSupervisor(usuario.Empleado);
+                        if (supervisorDispo)
+                        {
+                            supervisorValido++;
+                        }
                     }
+                    
+                }
+
+                if (supervisorValido == hayActivasOPausadas)
+                {
+                    orden.AsociarSupervisor(usuario.Empleado);
+                    await _unitOfWork.Complete();
                 }
             }
 
-            var specOrdenActualizada = new OrdenConNumeroSpecification(orden.Result.Numero);
-            var ordenActualizada = _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrdenActualizada);
-
-            return RedirectToAction("IniciarInspeccion", "ControlCalidad", new { ordenActualizada });
+            return RedirectToAction("IniciarAsociacion");
         }
-
-        public async Task<IActionResult> DesasociarSupervisor(int numeroOrden, string user)
+        public async Task<IActionResult> DesasociarSupervisor(int numeroOrden)
         {
-            var specUsuario = new ValidarEmpleadoSpecification(user);
-            var usuario = _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
+            var usuario = await ObtenerUsuario();
 
-            var specOrden = new OrdenConNumeroSpecification(numeroOrden);
-            var orden = _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
+            var specOrden = new OrdenConEstadoActivaOPausadaYNumero(numeroOrden);
+            var orden = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
 
-            var lineas = _unitOfWork.Repository<LineaDeTrabajo>().ListAllAsync();
 
-            if (orden != null && usuario.Result.Empleado != null)
+            if (orden != null && usuario.Empleado != null )
             {
-                foreach (var linea in lineas.Result)
-                {
-                    var ordenDesasociada = linea.DesasociarSupervisor(orden.Result, usuario.Result.Empleado);
-                    if (ordenDesasociada != null)
-                    {
-                        _unitOfWork.Repository<OrdenDeProduccion>().Update(ordenDesasociada);
-                        await _unitOfWork.Complete();
-                    }
-                }
+                orden.DesasociarSupervisor(usuario.Empleado);
+                await _unitOfWork.Complete();
+                
             }
             return RedirectToAction("IniciarAsociacion");
+        }
+        private async Task<Usuario> ObtenerUsuario()
+        {
+            var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
+            var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
+            var usuario = await _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
+
+            return usuario;
         }
     }
 }

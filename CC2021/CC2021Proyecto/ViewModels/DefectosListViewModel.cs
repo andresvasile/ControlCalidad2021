@@ -11,6 +11,9 @@ namespace CC2021Proyecto.ViewModels
         public OrdenDeProduccion Orden{ get; set; }
         public DateTime Hora{ get; set; }
         public string Mensaje{ get; set; }
+        public Turno Turno{ get; set; }
+        public Hallazgo Hallazgo{ get; set; }
+        public int CantidadPrimera{ get; set; }
 
     }
 }

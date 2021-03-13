@@ -1,1 +1,201 @@
-﻿
+﻿@using Dominio.Entities.Enums
+@model DefectosListViewModel
+
+<div class="d-flex">
+    <div class='bg-primary' style='height: auto'>
+        <nav>
+            <div class="container border-bottom border-light py-2">
+                <h5><a href="./calidadHermanado.html" class='nav-item text-decoration-none text-light'>Hermanado</a></h5>
+            </div>
+            <div class="container border-bottom border-light py-2">
+                <h5><a href="./calidadInspeccion.html" class='nav-item text-decoration-none text-light'>Inspeccion</a></h5>
+            </div>
+        </nav>
+    </div>
+
+    <!--App-->
+    <div class="container my-4 text-center">
+        <h2 class='pb-4'>Orden de produccion</h2>
+        <div class="container mt-2 d-flex">
+            <h5 class='mx-4'><span class="font-weight-bolder text-primary text-info">Modelo:</span> @Model.Orden.Modelo.Denominacion </h5>
+            <h5 class='mx-4'><span class="font-weight-bolder text-info">Color:</span> @Model.Orden.Color.Descripcion </h5>
+            <h5 class='mx-4'>
+                <span class="font-weight-bolder text-info">
+                    Turno:
+                </span> @Model.Turno.Inicio.TimeOfDay-@Model.Turno.Fin.TimeOfDay-@Model.Turno.Descripcion
+            </h5>
+        </div>
+
+        <div class="container border border-primary overflow-auto" style="height: 78vh;">
+            <div class="row border border-primary border-left-0 border-right-0 border-top-0 overflow-auto d-flex mb-4">
+                <div class="col border-right border-primary text-center">
+                    
+                        <div class="row mt-4">
+                            <div class="container border-bottom border-primary">
+                                <h6>Defectos observados</h6>
+                                <p>Pie izquierdo</p>
+                            </div>
+                        </div>
+                        @foreach (var defecto in @Model.DefectosObservados)
+                        {
+                            <div class="row">
+                                <div class="container my-4 d-flex align-items-center">
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                    <div class="container w-100 d-flex flex-column align-items-center">
+                                        <h6>@defecto.Descripcion </h6>
+                                        @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion 
+                                            && @Model.Hallazgo?.Defecto?.TipoDefecto==TipoDefecto.Observado
+                                            && @Model.Hallazgo?.TipoPie==TipoPie.Izquierdo)
+                                        {
+                                            <input asp-for="@Model.Hallazgo.Cantidad" />
+                                        }
+
+                                    </div>
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="AgregarDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-hallazgo="@Model.Hallazgo"
+                                          asp-route-tipoPie="Izquierdo"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="Observado"
+                                    >
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    
+                </div>
+
+                <div class="col border-right border-primary text-center">
+                    <div class="row mt-4">
+                        <div class="container border-bottom border-primary">
+                            <h6>Defectos observados</h6>
+                            <p>Pie derecho</p>
+                        </div>
+                    </div>
+                    @foreach (var defecto in @Model.DefectosObservados)
+                    {
+                        <div class="row">
+                            <div class="container my-4 d-flex align-items-center">
+                                <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                <div class="container w-100 d-flex flex-column align-items-center">
+                                    <h6>@defecto.Descripcion </h6>
+                                    @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion 
+                                        && @Model.Hallazgo?.Defecto?.TipoDefecto==TipoDefecto.Observado
+                                        && @Model.Hallazgo?.TipoPie==TipoPie.Derecho)
+                                    {
+                                        <input asp-for="@Model.Hallazgo.Cantidad" />
+                                    }
+
+                                </div>
+                                <form asp-controller="ControlCalidad"
+                                      asp-action="AgregarDefecto"
+                                      asp-route-numeroOrden="@Model.Orden.Numero"
+                                      asp-route-hallazgo="@Model.Hallazgo"
+                                      asp-route-tipoPie="Derecho"
+                                      asp-route-defectoDescripcion="@defecto.Descripcion"
+                                      asp-route-tipoDefecto="Observado"
+                                >
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <div class="col border-right border-primary text-center">
+                    <div class="row mt-4">
+                        <div class="container border-bottom border-primary">
+                            <h6>Defectos de reproceso</h6>
+                            <p>Pie izquierdo</p>
+                        </div>
+                    </div>
+                    @foreach (var defecto in @Model.DefectosReprocesos)
+                    {
+                        <div class="row">
+                            <div class="container my-4 d-flex align-items-center">
+                                <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                <div class="container w-100 d-flex flex-column align-items-center">
+                                    <h6>@defecto.Descripcion </h6>
+                                    @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion)
+                                    {
+                                        <input asp-for="@Model.Hallazgo.Cantidad" />
+                                    }
+
+                                </div>
+                                <form asp-controller="ControlCalidad"
+                                      asp-action="AgregarDefecto"
+                                      asp-route-numeroOrden="@Model.Orden.Numero"
+                                      asp-route-hallazgo="@Model.Hallazgo"
+                                      asp-route-tipoPie="Izquierdo"
+                                      asp-route-defectoDescripcion="@defecto.Descripcion"
+                                      asp-route-tipoDefecto="Observado"
+                                >
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="col border-primary text-center">
+                    <div class="row mt-4">
+                        <div class="container border-bottom border-primary">
+                            <h6>Defectos de reproceso</h6>
+                            <p>Pie derecho</p>
+                        </div>
+                    </div>
+                    @foreach (var defecto in @Model.DefectosReprocesos)
+                    {
+                        <div class="row">
+                            <div class="container my-4 d-flex align-items-center">
+                                <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                <div class="container w-100 d-flex flex-column align-items-center">
+                                    <h6>@defecto.Descripcion </h6>
+                                    @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion)
+                                    {
+                                        <input asp-for="@Model.Hallazgo.Cantidad" />
+                                    }
+
+                                </div>
+                                <form asp-controller="ControlCalidad"
+                                      asp-action="AgregarDefecto"
+                                      asp-route-numeroOrden="@Model.Orden.Numero"
+                                      asp-route-hallazgo="@Model.Hallazgo"
+                                      asp-route-tipoPie="Derecho"
+                                      asp-route-defectoDescripcion="@defecto.Descripcion"
+                                      asp-route-tipoDefecto="Observado"
+                                >
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="container w-50 my-4 d-flex align-items-center">
+                    <form asp-controller="ControlCalidad"
+                          asp-action="RemoverParDePrimera"
+                          asp-route-numeroOrden="@Model.Orden.Numero">
+                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                    </form>
+                        <div class="container w-100 d-flex flex-column align-items-center">
+                            <h6>Pares de primera calidad</h6>
+                            <input asp-for="CantidadPrimera" />
+                        </div>
+                        <form asp-controller="ControlCalidad"
+                              asp-action="AgregarParDePrimera"
+                              asp-route-numeroOrden="@Model.Orden.Numero">
+                            <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+        <div class="container my-2">
+            <button asp-controller="Asociar"
+                    asp-action="IniciarAsociacion"class="btn btn-primary btn-sm">Volver</button>
+        </div>
+    </div>
+</div>

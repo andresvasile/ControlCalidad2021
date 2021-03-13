@@ -1,4 +1,5 @@
-﻿@model IReadOnlyList<Dominio.Entities.LineaDeTrabajo>
+﻿@using Dominio.Entities.Enums
+@model IReadOnlyList<Dominio.Entities.OrdenDeProduccion>
 <div class="d-flex">
     <div class='bg-primary' style='height: 91.3vh'>
         <nav>
@@ -16,96 +17,94 @@
         <h2 class='my-4'>Administrar ordenes de produccion</h2>
         <div class="d-flex flex-column my-2">
             <div class="d-flex justify-content-start mb-2">
-                <button class="btn btn-primary mr-3">Visualizar Datos</button>
                 <a asp-controller="OrdenDeProduccion" asp-action="IniciarNuevaOrden"><button class="btn btn-primary">Iniciar orden de produccion</button></a>
             </div>
-            <div class="container border border-primary overflow-auto" style="height: 60vh">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Numero</th>
-                            <th scope="col">Modelo</th>
-                            <th scope="col">Color</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Supervisor Linea</th>
-                            <th scope="col">Supervisor calidad </th>
-                            <th scope="col">Reanudar</th>
-                            <th scope="col">Pausar</th>
-                            <th scope="col">Finalizar</th>
+            <!--<div class="container border border-primary overflow-auto" style="height: 60vh; width: 100vw">-->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Numero de linea</th>
+                        <th scope="col">Numero de orden</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Supervisor Linea</th>
+                        <th scope="col">Supervisor calidad </th>
+                        <th scope="col">Reanudar</th>
+                        <th scope="col">Pausar</th>
+                        <th scope="col">Finalizar</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var linea in Model)
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var orden in @Model)
                     {
-                        if (linea.OrdenesDeProduccion.Count > 0)
+                        if (@Model.Count > 0)
                         {
-                            foreach (var orden in linea.OrdenesDeProduccion)
-                            {
-                                <tr>
-                                    <th scope="row">@linea.Numero</th>
-                                    <td>@orden.Numero</td>
-                                    <td>@orden.Modelo.Denominacion</td>
-                                    <td>@orden.Color.Descripcion</td>
-                                    <td>@orden.Estado</td>
-                                    @if (orden.EmpleadoOrden == null)
-                                    {
-                                        <td></td>
-                                    }
-                                    else
-                                    {
-                                        <td>"@orden.EmpleadoOrden"</td>}
-                                    <td></td>
-                                    <td></td>
-                                    <td><button class="btn btn-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-play-btn" viewBox="0 0 16 16">
-                                        <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
-                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                    </svg></button></td>
-                                    <td><button class="btn btn-warning btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pause-btn" viewBox="0 0 16 16">
-                                        <path d="M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z"/>
-                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                    </svg></button></td>
-                                    <td><button class="btn btn-danger btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-stop-circle" viewBox="0 0 16 16">
-                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                        <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z"/>
-                                    </svg></button></td>
-                                </tr>
-                            }
+                    <tr>
+                        <th scope="row">@orden.Linea.Numero</th>
+                        <td>@orden.Numero</td>
+                        <td>@orden.Modelo.Denominacion</td>
+                        <td>@orden.Color.Descripcion</td>
+                        <td>@orden.Estado</td>
+                        <td>@orden.LineaIniciadaPor.Nombre @orden.LineaIniciadaPor.Apellido</td>
+                        @if (orden.EmpleadoOrden == null)
+                        {
+                            <td>No asignado</td>
                         }
                         else
                         {
-                            <tr>
-                                <th scope="row">@linea.Numero</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                @if (linea.Empleado == null)
-                                {
-                                    <td></td>
-                                }
-                                else
-                                {
-                                    <td>@linea.Empleado</td>
+                            <td>@orden.EmpleadoOrden.Nombre @orden.EmpleadoOrden.Apellido</td>
+                        }
+                        
+                        <td>
+                            <form asp-controller="OrdenDeProduccion"
+                                  asp-action="ReanudarOrden"
+                                  asp-route-numeroLinea="@orden.Linea.Numero"
+                                  method="post">
+                                <button disabled="@(EstadoOrden.Activa == orden.Estado ? "disabled" : null)"
+                                        class="btn btn-success btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-play-btn" viewBox="0 0 16 16">
+                                        <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
+                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-controller="OrdenDeProduccion"
+                                  asp-action="PausarOrden"
+                                  asp-route-numeroLinea="@orden.Linea.Numero"
+                                  method="post">
+                                <button disabled="@(EstadoOrden.Pausada == orden.Estado ? "disabled" : null)" class="btn btn-warning btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pause-btn" viewBox="0 0 16 16">
+                                        <path d="M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z" />
+                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-controller="OrdenDeProduccion"
+                                  asp-action="FinalizarOrden"
+                                  asp-route-numeroLinea="@orden.Linea.Numero"
+                                  method="post">
+                                <button disabled="@(EstadoOrden.Finalizada == orden.Estado ? "disabled" : null)"
+                                        class="btn btn-danger btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-stop-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z" />
+                                    </svg>
+                                </button>
 
-                                }
-                                <td><button class="btn btn-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-play-btn" viewBox="0 0 16 16">
-                                    <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
-                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                </svg></button></td>
-                                <td><button class="btn btn-warning btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pause-btn" viewBox="0 0 16 16">
-                                    <path d="M6.25 5C5.56 5 5 5.56 5 6.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C7.5 5.56 6.94 5 6.25 5zm3.5 0c-.69 0-1.25.56-1.25 1.25v3.5a1.25 1.25 0 1 0 2.5 0v-3.5C11 5.56 10.44 5 9.75 5z"/>
-                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                </svg></button></td>
-                                <td><button class="btn btn-danger btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-stop-circle" viewBox="0 0 16 16">
-                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                    <path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3z"/>
-                                </svg></button></td>
-                            </tr>}
+                            </form>
+                        </td>
+                    </tr>
+                        }
                     }
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
+            <!--</div>-->
         </div>
     </div>
 

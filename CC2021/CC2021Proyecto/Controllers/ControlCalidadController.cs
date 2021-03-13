@@ -8,7 +8,10 @@ using Datos.Data.Interfaces;
 using Dominio.Entities;
 using Dominio.Entities.Enums;
 using Dominio.Interfaces;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CC2021Proyecto.Controllers
 {
@@ -27,17 +30,21 @@ namespace CC2021Proyecto.Controllers
             return View();
         }
 
-        public async Task<IActionResult> IniciarInspeccion(OrdenDeProduccion orden, string user)
+        public async Task<IActionResult> IniciarInspeccion(int numeroOrden)
         {
-            if (orden != null)
+           return await Iniciar(numeroOrden);
+        }
+
+        public async Task<IActionResult> Iniciar(int numeroOrden, Defecto defecto =null, int cantidadPrimera =-1)
+        {
+            var usuario = await ObtenerUsuario();
+
+            var specOrden = new OrdenConNumeroSpecification(numeroOrden);
+            var ordenCorrecta = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
+
+            if (ordenCorrecta != null)
             {
-                var specUser = new ValidarEmpleadoSpecification(user);
-                var usuario = _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUser);
-
-                var specOrden = new OrdenConNumeroSpecification(orden.Numero);
-                var ordenCorrecta = _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
-
-                var empleadoValido = ordenCorrecta.Result.VerificarAsosiacion(usuario.Result.Empleado);
+                var empleadoValido = ordenCorrecta.VerificarAsosiacion(usuario.Empleado);
 
                 if (empleadoValido)
                 {
@@ -49,65 +56,131 @@ namespace CC2021Proyecto.Controllers
 
                     var hora = _unitOfWork.GetHora();
 
+                    var turnos = await _unitOfWork.Repository<Turno>().ListAllAsync();
+                    var turno = ordenCorrecta.Linea.ValidarTurno(turnos, hora);
+
+                    var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
+                    var horarios = await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
+
                     var defectosListViewModel = new DefectosListViewModel
                     {
                         DefectosObservados = defectosObservados,
                         DefectosReprocesos = defectosReproceso,
                         Hora = hora,
-                        Orden = orden
+                        Orden = ordenCorrecta,
+                        Turno = turno,
                     };
-                    return View(defectosListViewModel);
+
+
+                    if (horarios.Count > 0)
+                    {
+                        if (horarios.Count == 0)
+                        {
+                            var hallazgo = new Hallazgo();
+                            defectosListViewModel.Hallazgo = hallazgo;
+                        }
+                        else
+                        {
+                            defectosListViewModel.Hallazgo = horarios.Last().Hallazgos
+                                .SingleOrDefault(x => x.Defecto == defecto);
+                        }
+                        defectosListViewModel.CantidadPrimera = horarios.Last().ParesPrimera.Last().Cantidad; ;
+                    }
+
+                    return View("IniciarInspeccion", defectosListViewModel);
                 }
             }
 
-            return View(new DefectosListViewModel {Mensaje = "El empleado no esta asociado a la orden"});
+            return View("IniciarInspeccion",new DefectosListViewModel { Mensaje = "El empleado no esta asociado a la orden" });
+        }
+        private async Task<Usuario> ObtenerUsuario()
+        {
+            var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
+            var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
+            var usuario = await _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
+
+            return usuario;
         }
 
-        public async Task<IActionResult> AgregarParDePrimera(OrdenDeProduccion orden, string user, Primera primera)
+        public async Task<IActionResult> AgregarParDePrimera(int numeroOrden)
         {
-            if (orden != null)
-            {
-                var specUser = new ValidarEmpleadoSpecification(user);
-                var usuario = _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUser);
+            var usuario = await ObtenerUsuario();
+            var cantidadPrimera = 0;
 
-                var specOrden = new OrdenConNumeroSpecification(orden.Numero);
-                var ordenCorrecta = _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
-
-
-                if (ordenCorrecta.Result != null)
-                {
-                    primera.Hora = _unitOfWork.GetHora();
-                    primera.Cantidad = 1;
-                    primera.EmpleadoDeCalidad = usuario.Result.Empleado;
-                    ordenCorrecta.Result.AgregarParDePrimera(primera);
-                    _unitOfWork.Repository<OrdenDeProduccion>().Update(ordenCorrecta.Result);
-                    await _unitOfWork.Complete();
-                }
-            }
-
-            return View("IniciarInspeccion");
-        }
-
-        public async Task<IActionResult> AgregarDefecto(OrdenDeProduccion orden, string user, Hallazgo hallazgo)
-        {
-            if (orden != null)
-            {
-                var specUser = new ValidarEmpleadoSpecification(user);
-                var usuario = await _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUser);
-
-                var specOrden = new OrdenConNumeroSpecification(orden.Numero);
+                var specOrden = new OrdenConNumeroSpecification(numeroOrden);
                 var ordenCorrecta = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
 
-                if (ordenCorrecta != null)
+                
+                if (ordenCorrecta != null && usuario !=null)
                 {
-                    hallazgo.Hora = _unitOfWork.GetHora();
-                    hallazgo.Cantidad = 1;
-                    ordenCorrecta.AgregarDefecto(hallazgo);
-                    _unitOfWork.Repository<OrdenDeProduccion>().Update(ordenCorrecta);
+                    var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
+                    var horarios =await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
+                    if (horarios.Count>0)
+                    {
+                        var hora = _unitOfWork.GetHora();
+                        var cantidad = 1;
+
+                        ordenCorrecta.AgregarParDePrimera(hora, cantidad, usuario.Empleado,horarios);
+                        await _unitOfWork.Complete();
+                }
+                    
+                }
+                return await Iniciar(numeroOrden);
+        }
+
+        public async Task<IActionResult> RemoverParDePrimera(int numeroOrden)
+        {
+            var usuario = await ObtenerUsuario();
+            var cantidadPrimera = 0;
+
+            var specOrden = new OrdenConNumeroSpecification(numeroOrden);
+            var ordenCorrecta = await _unitOfWork.Repository<OrdenDeProduccion>().GetEntityWithSpec(specOrden);
+
+
+            if (ordenCorrecta != null && usuario != null)
+            {
+                var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
+                var horarios = await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
+                if (horarios.Count > 0)
+                {
+                    var hora = _unitOfWork.GetHora();
+                    var cantidad = 1;
+
+                    ordenCorrecta.RemoverParDePrimera(horarios);
                     await _unitOfWork.Complete();
                 }
+
             }
-            return View("IniciarInspeccion");
+            return await Iniciar(numeroOrden);
         }
+
+        public async Task<IActionResult> AgregarDefecto(int numeroOrden, Hallazgo hallazgo
+            , string defectoDescripcion, TipoDefecto tipoDefecto, TipoPie tipoPie)
+        {
+            var usuario = await ObtenerUsuario();
+
+            var specDefecto = new DefectoDescripcionSpecification(defectoDescripcion);
+            var defecto = await _unitOfWork.Repository<Defecto>().GetEntityWithSpec(specDefecto);
+
+                var specOrden = new OrdenConNumeroSpecification(numeroOrden);
+                var ordenCorrecta = await _unitOfWork.Repository<OrdenDeProduccion>()
+                    .GetEntityWithSpec(specOrden);
+
+
+                if (ordenCorrecta != null && usuario!= null)
+                {
+                    var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
+                    var horarios = await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
+
+                    hallazgo.TipoPie = tipoPie;
+                    hallazgo.Hora = _unitOfWork.GetHora();
+                    hallazgo.Cantidad = 1;
+                    ordenCorrecta.AgregarDefecto(hallazgo, defecto, horarios);
+                    await _unitOfWork.Complete();
+                }
+                return await Iniciar(numeroOrden, defecto);
+        }
+
+       
     }
 }

@@ -49,16 +49,17 @@ namespace Datos
 
         public void Update(T entity)
         {
-            _context.Set<T>().Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
+            var set = _context.Set<T>();
+            set.Attach(entity);
+            var entry = _context.Entry(entity);
+            entry.State = EntityState.Modified;
+            _context.SaveChanges();
         }
 
         public void Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
         }
-
-        
 
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
