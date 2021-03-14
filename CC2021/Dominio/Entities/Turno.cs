@@ -14,13 +14,14 @@ namespace Dominio.Entities
             var HoraFin = Fin.TimeOfDay;
             var hora = fechaActual.TimeOfDay;
 
-            if (HoraInicio > HoraFin)
-            {
-                return HoraInicio >= hora && hora <= HoraFin;
-            }
+            return HoraInicio <= HoraFin ?
+                hora >= HoraInicio && hora < HoraFin :
+                hora >= HoraInicio || hora < HoraFin;
+        }
 
-            return !(HoraInicio >= hora && hora <= HoraFin);
-            
+        public TimeSpan HaFinalizadoHace( DateTime horaActual)
+        {
+            return horaActual.Subtract(Fin);
         }
     }
 

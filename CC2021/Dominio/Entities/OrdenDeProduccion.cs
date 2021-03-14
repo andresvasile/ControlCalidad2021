@@ -107,12 +107,6 @@ namespace Dominio.Entities
 
         public void AgregarParDePrimera(DateTime hora, int cantidad, Empleado empleado, List<HorarioTrabajo> horarios)
         {
-            if (horarios.Last().ParesPrimera.Count > 0)
-            {
-                horarios.Last().ParesPrimera.Last().Cantidad++;
-            }
-            else
-            {
                 var prim = new Primera
                 {
                     EmpleadoDeCalidad = empleado,
@@ -120,10 +114,11 @@ namespace Dominio.Entities
                     Hora = hora
                 };
                 horarios.Last().ParesPrimera.Add(prim);
-            }
-            
         }
-
+        public void RemoverParDePrimera(List<HorarioTrabajo> horarios)
+        {
+            horarios.Last().ParesPrimera.RemoveAt(horarios.Last().ParesPrimera.Count - 1);
+        }
         public bool VerificarAsosiacion(Empleado empleado)
         {
             if (EmpleadoOrden == empleado)
@@ -134,33 +129,31 @@ namespace Dominio.Entities
             return false;
         }
 
-        public void AgregarDefecto(Hallazgo hallazgo, Defecto defecto, List<HorarioTrabajo> horarios)
+        public void AgregarDefecto(TipoPie tipoPie,DateTime hora, Empleado empleado
+            , int cantidad, Defecto defecto, List<HorarioTrabajo> horarios)
         {
-            var hallazgoConDefecto = horarios.Last().Hallazgos.SingleOrDefault(d => d.Defecto == defecto);
-            if (hallazgoConDefecto != null)
-            {
-                hallazgoConDefecto.Cantidad++;
-            }
-            else
-            {
+            
                 var hallaz = new Hallazgo()
                 {
-                    EmpleadoDeCalidad = hallazgo.EmpleadoDeCalidad,
-                    Hora = hallazgo.Hora,
+                    EmpleadoDeCalidad = empleado,
+                    Hora = hora,
                     Defecto = defecto,
-                    Cantidad = hallazgo.Cantidad,
-                    TipoPie = hallazgo.TipoPie,
+                    Cantidad = cantidad,
+                    TipoPie = tipoPie,
 
                 };
                 horarios.Last().Hallazgos.Add(hallaz);
-            }
         }
 
-        public void RemoverParDePrimera( List<HorarioTrabajo> horarios)
+
+        public void RemoverDefecto(TipoPie tipoPie, Empleado usuarioEmpleado, Defecto defecto, List<HorarioTrabajo> horarios)
         {
-            if (horarios.Last().ParesPrimera.Count > 0)
+            var h = horarios.Last().Hallazgos.Any(x => x.Defecto == defecto
+                                               && x.EmpleadoDeCalidad == usuarioEmpleado
+                                               && x.TipoPie==tipoPie);
+            if (h)
             {
-                horarios.Last().ParesPrimera.Last().Cantidad--;
+                horarios.Last().Hallazgos.RemoveAt(horarios.Last().Hallazgos.Count - 1);
             }
         }
     }

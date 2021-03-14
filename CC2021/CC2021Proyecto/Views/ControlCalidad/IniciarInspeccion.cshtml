@@ -22,7 +22,7 @@
             <h5 class='mx-4'>
                 <span class="font-weight-bolder text-info">
                     Turno:
-                </span> @Model.Turno.Inicio.TimeOfDay-@Model.Turno.Fin.TimeOfDay-@Model.Turno.Descripcion
+                </span> @Model.Turno?.Inicio.TimeOfDay-@Model.Turno?.Fin.TimeOfDay-@Model.Turno?.Descripcion
             </h5>
         </div>
 
@@ -40,27 +40,35 @@
                         {
                             <div class="row">
                                 <div class="container my-4 d-flex align-items-center">
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
-                                    <div class="container w-100 d-flex flex-column align-items-center">
-                                        <h6>@defecto.Descripcion </h6>
-                                        @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion 
-                                            && @Model.Hallazgo?.Defecto?.TipoDefecto==TipoDefecto.Observado
-                                            && @Model.Hallazgo?.TipoPie==TipoPie.Izquierdo)
-                                        {
-                                            <input asp-for="@Model.Hallazgo.Cantidad" />
-                                        }
-
-                                    </div>
                                     <form asp-controller="ControlCalidad"
-                                          asp-action="AgregarDefecto"
+                                          asp-action="RemoverDefecto"
                                           asp-route-numeroOrden="@Model.Orden.Numero"
-                                          asp-route-hallazgo="@Model.Hallazgo"
                                           asp-route-tipoPie="Izquierdo"
                                           asp-route-defectoDescripcion="@defecto.Descripcion"
-                                          asp-route-tipoDefecto="Observado"
-                                    >
-                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                          asp-route-tipoDefecto="Observado">
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
                                     </form>
+                                        <div class="container w-100 d-flex flex-column align-items-center">
+                                            <h6>@defecto.Descripcion </h6>
+                                            @if (@Model.def == null)
+                                            {
+                                                <input asp-for="@Model.DefectosObservadosIzquierdo" />
+                                            }
+                                            else if (defecto.Descripcion == @Model.def?.Descripcion
+                                                     && defecto.TipoDefecto == TipoDefecto.Observado)
+                                            {
+                                                <input asp-for="@Model.DefectosObservadosIzquierdo" />
+                                            }
+
+                                        </div>
+                                        <form asp-controller="ControlCalidad"
+                                              asp-action="AgregarDefecto"
+                                              asp-route-numeroOrden="@Model.Orden.Numero"
+                                              asp-route-tipoPie="Izquierdo"
+                                              asp-route-defectoDescripcion="@defecto.Descripcion"
+                                              asp-route-tipoDefecto="Observado">
+                                            <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                        </form>
                                 </div>
                             </div>
                         }
@@ -78,25 +86,33 @@
                     {
                         <div class="row">
                             <div class="container my-4 d-flex align-items-center">
-                                <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                <form asp-controller="ControlCalidad"
+                                      asp-action="RemoverDefecto"
+                                      asp-route-numeroOrden="@Model.Orden.Numero"
+                                      asp-route-tipoPie="Derecho"
+                                      asp-route-defectoDescripcion="@defecto.Descripcion"
+                                      asp-route-tipoDefecto="Observado">
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                </form>
                                 <div class="container w-100 d-flex flex-column align-items-center">
                                     <h6>@defecto.Descripcion </h6>
-                                    @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion 
-                                        && @Model.Hallazgo?.Defecto?.TipoDefecto==TipoDefecto.Observado
-                                        && @Model.Hallazgo?.TipoPie==TipoPie.Derecho)
+                                    @if (@Model.def == null)
                                     {
-                                        <input asp-for="@Model.Hallazgo.Cantidad" />
+                                        <input asp-for="@Model.DefectosObservadosDerecho"/>
+                                    }
+                                    else if (defecto.Descripcion == @Model.def?.Descripcion
+                                             && defecto.TipoDefecto == TipoDefecto.Observado)
+                                    {
+                                        <input asp-for="@Model.DefectosObservadosDerecho"/>
                                     }
 
                                 </div>
                                 <form asp-controller="ControlCalidad"
                                       asp-action="AgregarDefecto"
                                       asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-hallazgo="@Model.Hallazgo"
                                       asp-route-tipoPie="Derecho"
                                       asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Observado"
-                                >
+                                      asp-route-tipoDefecto="Observado">
                                     <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
                                 </form>
                             </div>
@@ -115,22 +131,31 @@
                     {
                         <div class="row">
                             <div class="container my-4 d-flex align-items-center">
-                                <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                <form asp-controller="ControlCalidad"
+                                      asp-action="RemoverDefecto"
+                                      asp-route-numeroOrden="@Model.Orden.Numero"
+                                      asp-route-tipoPie="Izquierdo"
+                                      asp-route-defectoDescripcion="@defecto.Descripcion"
+                                      asp-route-tipoDefecto="Reproceso">
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                </form>
                                 <div class="container w-100 d-flex flex-column align-items-center">
                                     <h6>@defecto.Descripcion </h6>
-                                    @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion)
+                                    @if (@Model.def == null)
                                     {
-                                        <input asp-for="@Model.Hallazgo.Cantidad" />
+                                        <input asp-for="@Model.DefectosReprocesosIzquierdo" />
                                     }
-
+                                    else if (defecto.Descripcion == @Model.def?.Descripcion)
+                                    {
+                                        <input asp-for="@Model.DefectosReprocesosIzquierdo" />
+                                    }
                                 </div>
                                 <form asp-controller="ControlCalidad"
                                       asp-action="AgregarDefecto"
                                       asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-hallazgo="@Model.Hallazgo"
                                       asp-route-tipoPie="Izquierdo"
                                       asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Observado"
+                                      asp-route-tipoDefecto="Reproceso"
                                 >
                                     <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
                                 </form>
@@ -150,23 +175,32 @@
                     {
                         <div class="row">
                             <div class="container my-4 d-flex align-items-center">
-                                <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                <form asp-controller="ControlCalidad"
+                                      asp-action="RemoverDefecto"
+                                      asp-route-numeroOrden="@Model.Orden.Numero"
+                                      asp-route-tipoPie="Derecho"
+                                      asp-route-defectoDescripcion="@defecto.Descripcion"
+                                      asp-route-tipoDefecto="Reproceso">
+                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                </form>
                                 <div class="container w-100 d-flex flex-column align-items-center">
                                     <h6>@defecto.Descripcion </h6>
-                                    @if(@Model.Hallazgo?.Defecto?.Descripcion == @defecto.Descripcion)
+                                    @if (@Model.def == null)
                                     {
-                                        <input asp-for="@Model.Hallazgo.Cantidad" />
+                                        <input asp-for="@Model.DefectosReprocesosDerecho" />
+                                    }
+                                    else if (defecto.Descripcion == @Model.def?.Descripcion)
+                                    {
+                                        <input asp-for="@Model.DefectosReprocesosDerecho" />
                                     }
 
                                 </div>
                                 <form asp-controller="ControlCalidad"
                                       asp-action="AgregarDefecto"
                                       asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-hallazgo="@Model.Hallazgo"
                                       asp-route-tipoPie="Derecho"
                                       asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Observado"
-                                >
+                                      asp-route-tipoDefecto="Reproceso">
                                     <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
                                 </form>
                             </div>

@@ -14,6 +14,11 @@ namespace CC2021Proyecto.ViewModels
         public Turno Turno{ get; set; }
         public Hallazgo Hallazgo{ get; set; }
         public int CantidadPrimera{ get; set; }
+        public int DefectosObservadosIzquierdo{ get; set; }
+        public int DefectosObservadosDerecho{ get; set; }
+        public int DefectosReprocesosIzquierdo { get; set; }
+        public int DefectosReprocesosDerecho { get; set; }
+        public Defecto def { get; set; }
 
     }
 }
