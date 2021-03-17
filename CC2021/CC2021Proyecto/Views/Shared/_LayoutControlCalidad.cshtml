@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,8 +17,20 @@
         <span class="navbar-brand">Control de calidad</span>
     </div>
 </nav>
-<div >
+<div class="d-flex">
+    <div class='bg-primary' style='height: auto'>
+        <nav>
+            <div class="container border-bottom border-light py-2">
+                <h5><a href="./calidadHermanado.html" class='nav-item text-decoration-none text-light'>Hermanado</a></h5>
+            </div>
+            <div class="container border-bottom border-light py-2">
+                <h5><a href="./calidadInspeccion.html" class='nav-item text-decoration-none text-light'>Inspeccion</a></h5>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
     @RenderBody()
+    </div>
 </div>
 <!--SCRIPTS-->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -28,4 +39,3 @@
 </html>
 
 @RenderSection("Scripts",required:false)
-

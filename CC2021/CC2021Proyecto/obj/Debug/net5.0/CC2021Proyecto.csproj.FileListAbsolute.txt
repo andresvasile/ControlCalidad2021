@@ -345,3 +345,5 @@ D:\RepositorioVS\ControlCalidad2021\CC2021\CC2021Proyecto\obj\Debug\net5.0\CC202
 D:\RepositorioVS\ControlCalidad2021\CC2021\CC2021Proyecto\obj\Debug\net5.0\CC2021Proyecto.genruntimeconfig.cache
 >>>>>>> 5ea75cbb28bee9067aac1dff96635c04a71473ae
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\ControlCalidad\Index.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\ControlCalidad\_ViewStart.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Shared\_LayoutControlCalidad.cshtml.g.cs

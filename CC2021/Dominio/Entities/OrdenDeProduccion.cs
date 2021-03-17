@@ -117,7 +117,11 @@ namespace Dominio.Entities
         }
         public void RemoverParDePrimera(List<HorarioTrabajo> horarios)
         {
-            horarios.Last().ParesPrimera.RemoveAt(horarios.Last().ParesPrimera.Count - 1);
+            if (horarios.Last().ParesPrimera.Count>0)
+            {
+                horarios.Last().ParesPrimera.RemoveAt(horarios.Last().ParesPrimera.Count - 1);
+            }
+            
         }
         public bool VerificarAsosiacion(Empleado empleado)
         {
@@ -153,7 +157,10 @@ namespace Dominio.Entities
                                                && x.TipoPie==tipoPie);
             if (h)
             {
-                horarios.Last().Hallazgos.RemoveAt(horarios.Last().Hallazgos.Count - 1);
+                if(horarios.Last().Hallazgos.Any())
+                {
+                    horarios.Last().Hallazgos.RemoveAt(horarios.Last().Hallazgos.Count - 1);
+                }
             }
         }
     }

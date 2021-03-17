@@ -15,9 +15,7 @@
                 <label asp-for="Descripcion">Descripcion</label>
                 <textarea asp-for="Descripcion" class="form-control" style="height: 100px" placeholder="" id="floatingTextarea">@Model.Descripcion</textarea>
                 <span asp-validation-for="Descripcion" class="danger"></span>
-
             </div>
-
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 <a asp-action="Index" asp-controller="Colores" type="button" class="btn btn-secondary form-cotrol">Cerrar</a>

@@ -25,6 +25,7 @@ namespace CC2021Proyecto.Controllers
         public async Task<IActionResult> Index()
         {
             var colores = await _unitOfWork.Repository<Color>().ListAllAsync();
+            
             return View(MapViewModel(colores));
         }
 
@@ -39,7 +40,6 @@ namespace CC2021Proyecto.Controllers
 
                 return View(MapViewModel(colores));
             }
-
 
             return View(MapViewModel(colores));
         }

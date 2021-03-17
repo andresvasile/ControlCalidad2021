@@ -12,7 +12,8 @@ namespace CC2021Proyecto.ViewModels
         public DateTime Hora{ get; set; }
         public string Mensaje{ get; set; }
         public Turno Turno{ get; set; }
-        public Hallazgo Hallazgo{ get; set; }
+        public IReadOnlyList<Hallazgo> Hallazgos { get; set; }
+        public IReadOnlyList<Primera> Primeras { get; set; }
         public int CantidadPrimera{ get; set; }
         public int DefectosObservadosIzquierdo{ get; set; }
         public int DefectosObservadosDerecho{ get; set; }

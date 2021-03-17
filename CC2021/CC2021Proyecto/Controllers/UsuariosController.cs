@@ -40,7 +40,7 @@ namespace CC2021Proyecto.Controllers
 
                 if (usuarioValidado.Empleado.Rol == TipoEmpleado.Administrativo)
                 {
-                    return RedirectToAction("Index", "Colores");
+                    return RedirectToAction("Index", "GestionAdmin");
                 }
                 if (usuarioValidado.Empleado.Rol == TipoEmpleado.SupervisorDeCalidad)
                 {

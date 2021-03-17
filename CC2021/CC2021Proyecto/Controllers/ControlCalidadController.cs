@@ -59,8 +59,8 @@ namespace CC2021Proyecto.Controllers
                     var turnos = await _unitOfWork.Repository<Turno>().ListAllAsync();
                     var turno = ordenCorrecta.Linea.ValidarTurno(turnos, hora);
 
-                    //if (turno != null)
-                    //{
+                    if (turno != null)
+                    {
                         var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
                         var horarios = await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
 
@@ -70,32 +70,20 @@ namespace CC2021Proyecto.Controllers
                             DefectosReprocesos = defectosReproceso,
                             Hora = hora,
                             Orden = ordenCorrecta,
-                            Turno = turno
+                            Turno = turno,
+                            Hallazgos = ordenCorrecta.Horarios.Last().Hallazgos,
+                            Primeras = ordenCorrecta.Horarios.Last().ParesPrimera
                         };
 
 
                         if (horarios.Count > 0)
                         {
-                            if (defecto != null)
-                            {
-                                defectosListViewModel.DefectosObservadosIzquierdo = horarios.Last().Hallazgos.FindAll(
-                                    (x => x.Defecto == defecto && x.TipoPie == TipoPie.Izquierdo)).Count;
-                                defectosListViewModel.DefectosObservadosDerecho = horarios.Last().Hallazgos.FindAll(
-                                    (x => x.Defecto == defecto && x.TipoPie == TipoPie.Derecho)).Count;
-                                defectosListViewModel.DefectosReprocesosIzquierdo = horarios.Last().Hallazgos.FindAll(
-                                    (x => x.Defecto == defecto && x.TipoPie == TipoPie.Izquierdo)).Count;
-                                defectosListViewModel.DefectosReprocesosDerecho = horarios.Last().Hallazgos.FindAll(
-                                    (x => x.Defecto == defecto && x.TipoPie == TipoPie.Derecho)).Count;
-                                defectosListViewModel.def = defecto;
-                            }
-
-
                             defectosListViewModel.CantidadPrimera = horarios.Last().ParesPrimera.Count; ;
                         }
                         
                         return View("IniciarInspeccion", defectosListViewModel);
-                    //}
-                   // else
+                    }
+                    else
                     {
                         return RedirectToAction("IniciarAsociacion", "Asociar");
                     }
@@ -131,7 +119,7 @@ namespace CC2021Proyecto.Controllers
 
                         ordenCorrecta.AgregarParDePrimera(hora, cantidad, usuario.Empleado,horarios);
                         await _unitOfWork.Complete();
-                }
+                    }
                     
                 }
                 return await Iniciar(numeroOrden);

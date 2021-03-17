@@ -1,17 +1,9 @@
 ﻿@using Dominio.Entities.Enums
+@using System.Linq
+@using Dominio.Entities
 @model DefectosListViewModel
 
 <div class="d-flex">
-    <div class='bg-primary' style='height: auto'>
-        <nav>
-            <div class="container border-bottom border-light py-2">
-                <h5><a href="./calidadHermanado.html" class='nav-item text-decoration-none text-light'>Hermanado</a></h5>
-            </div>
-            <div class="container border-bottom border-light py-2">
-                <h5><a href="./calidadInspeccion.html" class='nav-item text-decoration-none text-light'>Inspeccion</a></h5>
-            </div>
-        </nav>
-    </div>
 
     <!--App-->
     <div class="container my-4 text-center">
@@ -50,14 +42,24 @@
                                     </form>
                                         <div class="container w-100 d-flex flex-column align-items-center">
                                             <h6>@defecto.Descripcion </h6>
-                                            @if (@Model.def == null)
+                                            
+                                            @if (Model.Hallazgos.Count > 0)
                                             {
-                                                <input asp-for="@Model.DefectosObservadosIzquierdo" />
+                                                @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
+                                                {
+                                                    <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                        @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                                    && x.TipoPie == TipoPie.Izquierdo).Count()
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                                }
                                             }
-                                            else if (defecto.Descripcion == @Model.def?.Descripcion
-                                                     && defecto.TipoDefecto == TipoDefecto.Observado)
+                                            else
                                             {
-                                                <input asp-for="@Model.DefectosObservadosIzquierdo" />
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
                                             }
 
                                         </div>
@@ -96,15 +98,26 @@
                                 </form>
                                 <div class="container w-100 d-flex flex-column align-items-center">
                                     <h6>@defecto.Descripcion </h6>
-                                    @if (@Model.def == null)
+                                    
+                                    @if (Model.Hallazgos.Count > 0)
                                     {
-                                        <input asp-for="@Model.DefectosObservadosDerecho"/>
+                                        @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                            && x.TipoPie == TipoPie.Derecho).Count()
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                        }
                                     }
-                                    else if (defecto.Descripcion == @Model.def?.Descripcion
-                                             && defecto.TipoDefecto == TipoDefecto.Observado)
+                                    else
                                     {
-                                        <input asp-for="@Model.DefectosObservadosDerecho"/>
+                                        <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
                                     }
+
 
                                 </div>
                                 <form asp-controller="ControlCalidad"
@@ -141,14 +154,26 @@
                                 </form>
                                 <div class="container w-100 d-flex flex-column align-items-center">
                                     <h6>@defecto.Descripcion </h6>
-                                    @if (@Model.def == null)
+                                    
+                                    @if (Model.Hallazgos.Count > 0)
                                     {
-                                        <input asp-for="@Model.DefectosReprocesosIzquierdo" />
+                                        @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                            && x.TipoPie == TipoPie.Izquierdo).Count()
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                        }
                                     }
-                                    else if (defecto.Descripcion == @Model.def?.Descripcion)
+                                    else
                                     {
-                                        <input asp-for="@Model.DefectosReprocesosIzquierdo" />
+                                        <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
                                     }
+                                    
                                 </div>
                                 <form asp-controller="ControlCalidad"
                                       asp-action="AgregarDefecto"
@@ -185,14 +210,26 @@
                                 </form>
                                 <div class="container w-100 d-flex flex-column align-items-center">
                                     <h6>@defecto.Descripcion </h6>
-                                    @if (@Model.def == null)
+
+                                    @if (Model.Hallazgos.Count > 0)
                                     {
-                                        <input asp-for="@Model.DefectosReprocesosDerecho" />
+                                        @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                            && x.TipoPie == TipoPie.Derecho).Count()
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                        }
                                     }
-                                    else if (defecto.Descripcion == @Model.def?.Descripcion)
+                                    else
                                     {
-                                        <input asp-for="@Model.DefectosReprocesosDerecho" />
+                                        <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
                                     }
+                                    
 
                                 </div>
                                 <form asp-controller="ControlCalidad"
@@ -217,7 +254,16 @@
                     </form>
                         <div class="container w-100 d-flex flex-column align-items-center">
                             <h6>Pares de primera calidad</h6>
-                            <input asp-for="CantidadPrimera" />
+                            @if (Model.Primeras.Count > 0)
+                            {
+                                <p class="w-50 font-weight-bold" style="background-color: #ccc" >
+                                    @Model.Primeras.Count()
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                            }
                         </div>
                         <form asp-controller="ControlCalidad"
                               asp-action="AgregarParDePrimera"
