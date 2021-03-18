@@ -26,7 +26,7 @@ namespace CC2021Proyecto.Controllers
 
         public IActionResult Autenticacion()
         {
-            return View("Autenticacion");
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> Autenticacion(UsuarioValidation usuarioValidation)
@@ -56,6 +56,27 @@ namespace CC2021Proyecto.Controllers
             ModelState.AddModelError("", mensaje);
 
             return View();
+        }
+
+        public async Task<IActionResult> CerrarSesion()
+        {
+            var usuario = await ObtenerUsuario();
+            if (usuario != null)
+            {
+                 HttpContext.Session.SetString("","");
+            }
+            var usuario2 = await ObtenerUsuario();
+
+            return RedirectToAction("Autenticacion", "Usuarios");
+        }
+
+        private async Task<Usuario> ObtenerUsuario()
+        {
+            var sessionUser = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("SessionUser"));
+            var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
+            var usuario = await _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
+
+            return usuario;
         }
 
         public IActionResult ErrorAlAutenticar(string mensaje)

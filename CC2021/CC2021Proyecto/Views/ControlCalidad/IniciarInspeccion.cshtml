@@ -4,32 +4,165 @@
 @model DefectosListViewModel
 
 <div class="d-flex">
-
+ 
     <!--App-->
     <div class="container my-4 text-center">
-        <h2 class='pb-4'>Orden de produccion</h2>
+        <h2 class='pb-4' style="color: floralwhite">Orden de produccion</h2>
         <div class="container mt-2 d-flex">
-            <h5 class='mx-4'><span class="font-weight-bolder text-primary text-info">Modelo:</span> @Model.Orden.Modelo.Denominacion </h5>
-            <h5 class='mx-4'><span class="font-weight-bolder text-info">Color:</span> @Model.Orden.Color.Descripcion </h5>
-            <h5 class='mx-4'>
+            <h5 class='mx-4' style="color: floralwhite"><span class="font-weight-bolder text-primary text-info">Modelo:</span> @Model.Orden.Modelo.Denominacion </h5>
+            <h5 class='mx-4' style="color: floralwhite"><span class="font-weight-bolder text-info">Color:</span> @Model.Orden.Color.Descripcion </h5>
+            <h5 class='mx-4' style="color: floralwhite">
                 <span class="font-weight-bolder text-info">
                     Turno:
                 </span> @Model.Turno?.Inicio.TimeOfDay-@Model.Turno?.Fin.TimeOfDay-@Model.Turno?.Descripcion
             </h5>
         </div>
 
-        <div class="container border border-primary overflow-auto" style="height: 78vh;">
+        <div class="container border border-primary overflow-auto" style="height: 78vh; ">
             <div class="row border border-primary border-left-0 border-right-0 border-top-0 overflow-auto d-flex mb-4">
-                <div class="col border-right border-primary text-center">
-                    
-                        <div class="row mt-4">
-                            <div class="container border-bottom border-primary">
-                                <h6>Defectos observados</h6>
-                                <p>Pie izquierdo</p>
-                            </div>
+                <div class="col border-right border-primary text-center ">
+
+                    <div class="row mt-4">
+                        <div class="container border-bottom border-primary">
+                            <h6 style="color: floralwhite">Defectos observados</h6>
+                            <p style="color: floralwhite">Pie izquierdo</p>
                         </div>
+                    </div>
+                   
                         @foreach (var defecto in @Model.DefectosObservados)
                         {
+                            <div class="row">
+                                <div class="container my-4 d-flex align-items-center">
+
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="RemoverDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-tipoPie="Izquierdo"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                    </form>
+                                    <div class="container w-100 d-flex flex-column align-items-center">
+                                        <h6 style="color: floralwhite">@defecto.Descripcion </h6>
+
+                                        @if (Model.Hallazgos.Count > 0)
+                                        {
+                                            @if (@Model.Hallazgos.FirstOrDefault(x => x.Defecto.Descripcion == defecto.Descripcion &&
+                                                                                     x.Defecto.TipoDefecto == defecto.TipoDefecto &&
+                                                                                     x.TipoPie == TipoPie.Izquierdo) != null)
+                                            {
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                    @Model.Hallazgos.Count(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                                && x.TipoPie == TipoPie.Izquierdo &&
+                                                                                x.Defecto.TipoDefecto == defecto.TipoDefecto)
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                        }
+
+                                    </div>
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="AgregarDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-tipoPie="Izquierdo"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                       
+                                    </form>
+                                    
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+
+                <div class="col border-right border-primary text-center">
+                    <div class="row mt-4">
+                        <div class="container border-bottom border-primary">
+                            <h6 style="color: floralwhite">Defectos observados</h6>
+                            <p style="color: floralwhite">Pie derecho</p>
+                        </div>
+                    </div>
+
+                    
+                        @foreach (var defecto in @Model.DefectosObservados)
+                        {
+
+                            <div class="row">
+                                <div class="container my-4 d-flex align-items-center">
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="RemoverDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-tipoPie="Derecho"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                    </form>
+                                    <div class="container w-100 d-flex flex-column align-items-center">
+                                        <h6 style="color: floralwhite">@defecto.Descripcion </h6>
+
+                                        @if (Model.Hallazgos.Count > 0)
+                                        {
+                                            @if (@Model.Hallazgos.FirstOrDefault(x => x.Defecto.Descripcion == defecto.Descripcion &&
+                                                                                     x.Defecto.TipoDefecto == defecto.TipoDefecto &&
+                                                                                     x.TipoPie == TipoPie.Derecho) != null)
+                                            {
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                    @Model.Hallazgos.Count(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                                && x.TipoPie == TipoPie.Derecho &&
+                                                                                x.Defecto.TipoDefecto == defecto.TipoDefecto)
+
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                        }
+
+
+                                    </div>
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="AgregarDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-tipoPie="Derecho"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                       
+                                    </form>
+                                    
+                                </div>
+                            </div>
+                        }
+
+                    }
+                    
+                </div>
+                <div class="col border-right border-primary text-center">
+                    <div class="row mt-4">
+                        <div class="container border-bottom border-primary">
+                            <h6 style="color: floralwhite">Defectos de reproceso</h6>
+                            <p style="color: floralwhite">Pie izquierdo</p>
+                        </div>
+                    </div>
+                    
+                        @foreach (var defecto in @Model.DefectosReprocesos)
+                        {
+
                             <div class="row">
                                 <div class="container my-4 d-flex align-items-center">
                                     <form asp-controller="ControlCalidad"
@@ -37,212 +170,118 @@
                                           asp-route-numeroOrden="@Model.Orden.Numero"
                                           asp-route-tipoPie="Izquierdo"
                                           asp-route-defectoDescripcion="@defecto.Descripcion"
-                                          asp-route-tipoDefecto="Observado">
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
                                     </form>
-                                        <div class="container w-100 d-flex flex-column align-items-center">
-                                            <h6>@defecto.Descripcion </h6>
-                                            
-                                            @if (Model.Hallazgos.Count > 0)
+                                    <div class="container w-100 d-flex flex-column align-items-center">
+                                        <h6 style="color: floralwhite">@defecto.Descripcion </h6>
+
+                                        @if (Model.Hallazgos.Count > 0)
+                                        {
+                                            @if (@Model.Hallazgos.FirstOrDefault(x => x.Defecto.Descripcion == defecto.Descripcion &&
+                                                                                     x.Defecto.TipoDefecto == defecto.TipoDefecto &&
+                                                                                     x.TipoPie == TipoPie.Izquierdo) != null)
                                             {
-                                                @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
-                                                {
-                                                    <p class="w-50 font-weight-bold" style="background-color: #ccc">
-                                                        @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
-                                                                                    && x.TipoPie == TipoPie.Izquierdo).Count()
-                                                    </p>
-                                                }
-                                                else
-                                                {
-                                                    <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
-                                                }
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                    @Model.Hallazgos.Count(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                                && x.TipoPie == TipoPie.Izquierdo &&
+                                                                                x.Defecto.TipoDefecto == defecto.TipoDefecto)
+                                                </p>
                                             }
                                             else
                                             {
                                                 <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
                                             }
+                                        }
+                                        else
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                        }
 
-                                        </div>
-                                        <form asp-controller="ControlCalidad"
-                                              asp-action="AgregarDefecto"
-                                              asp-route-numeroOrden="@Model.Orden.Numero"
-                                              asp-route-tipoPie="Izquierdo"
-                                              asp-route-defectoDescripcion="@defecto.Descripcion"
-                                              asp-route-tipoDefecto="Observado">
-                                            <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                    </div>
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="AgregarDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-tipoPie="Izquierdo"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
+                                        
+                                    </form>
+                                    
+                                </div>
+                            </div>
+                        }
+
+                    }
+                    
+                </div>
+                
+            <!--Reprocesos derechos-->
+            <div class="col border-primary text-center">
+                    <div class="row mt-4">
+                        <div class="container border-bottom border-primary">
+                            <h6 style="color: floralwhite">Defectos de reproceso</h6>
+                            <p style="color: floralwhite">Pie derecho</p>
+                        </div>
+                    </div>
+                    
+                        @foreach (var defecto in @Model.DefectosReprocesos)
+                        {
+                            <div class="row">
+                                <div class="container my-4 d-flex align-items-center">
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="RemoverDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-tipoPie="Derecho"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
+                                    </form>
+                                    <div class="container w-100 d-flex flex-column align-items-center">
+                                        <h6 style="color: floralwhite">@defecto.Descripcion </h6>
+
+                                        @if (Model.Hallazgos.Count > 0)
+                                        {
+                                            if (@Model.def == null)
+                                            {
+                                    <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                            }
+                                            else if (@Model.Hallazgos.FirstOrDefault(x => x.Defecto.Id == Model.def.Id &&
+                                                                                  x.TipoPie == TipoPie.Derecho) != null)
+                                            {
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">
+                                                    @Model.Hallazgos.Count(x => x.Defecto.Descripcion == defecto.Descripcion
+                                                                                && x.TipoPie == TipoPie.Derecho &&
+                                                                                x.Defecto.TipoDefecto == defecto.TipoDefecto)
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
+
+                                        }
+
+
+                                    </div>
+                                    <form asp-controller="ControlCalidad"
+                                          asp-action="AgregarDefecto"
+                                          asp-route-numeroOrden="@Model.Orden.Numero"
+                                          asp-route-tipoPie="Derecho"
+                                          asp-route-defectoDescripcion="@defecto.Descripcion"
+                                          asp-route-tipoDefecto="@defecto.TipoDefecto">
+                                        <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
                                         </form>
                                 </div>
                             </div>
                         }
-                    
-                </div>
-
-                <div class="col border-right border-primary text-center">
-                    <div class="row mt-4">
-                        <div class="container border-bottom border-primary">
-                            <h6>Defectos observados</h6>
-                            <p>Pie derecho</p>
-                        </div>
-                    </div>
-                    @foreach (var defecto in @Model.DefectosObservados)
-                    {
-                        <div class="row">
-                            <div class="container my-4 d-flex align-items-center">
-                                <form asp-controller="ControlCalidad"
-                                      asp-action="RemoverDefecto"
-                                      asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-tipoPie="Derecho"
-                                      asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Observado">
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
-                                </form>
-                                <div class="container w-100 d-flex flex-column align-items-center">
-                                    <h6>@defecto.Descripcion </h6>
-                                    
-                                    @if (Model.Hallazgos.Count > 0)
-                                    {
-                                        @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
-                                        {
-                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">
-                                                @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
-                                                                            && x.TipoPie == TipoPie.Derecho).Count()
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
-                                    }
-
-
-                                </div>
-                                <form asp-controller="ControlCalidad"
-                                      asp-action="AgregarDefecto"
-                                      asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-tipoPie="Derecho"
-                                      asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Observado">
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
-                                </form>
-                            </div>
-                        </div>
                     }
-
-                </div>
-                <div class="col border-right border-primary text-center">
-                    <div class="row mt-4">
-                        <div class="container border-bottom border-primary">
-                            <h6>Defectos de reproceso</h6>
-                            <p>Pie izquierdo</p>
-                        </div>
-                    </div>
-                    @foreach (var defecto in @Model.DefectosReprocesos)
-                    {
-                        <div class="row">
-                            <div class="container my-4 d-flex align-items-center">
-                                <form asp-controller="ControlCalidad"
-                                      asp-action="RemoverDefecto"
-                                      asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-tipoPie="Izquierdo"
-                                      asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Reproceso">
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
-                                </form>
-                                <div class="container w-100 d-flex flex-column align-items-center">
-                                    <h6>@defecto.Descripcion </h6>
-                                    
-                                    @if (Model.Hallazgos.Count > 0)
-                                    {
-                                        @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
-                                        {
-                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">
-                                                @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
-                                                                            && x.TipoPie == TipoPie.Izquierdo).Count()
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
-                                    }
-                                    
-                                </div>
-                                <form asp-controller="ControlCalidad"
-                                      asp-action="AgregarDefecto"
-                                      asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-tipoPie="Izquierdo"
-                                      asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Reproceso"
-                                >
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
-                                </form>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                <div class="col border-primary text-center">
-                    <div class="row mt-4">
-                        <div class="container border-bottom border-primary">
-                            <h6>Defectos de reproceso</h6>
-                            <p>Pie derecho</p>
-                        </div>
-                    </div>
-                    @foreach (var defecto in @Model.DefectosReprocesos)
-                    {
-                        <div class="row">
-                            <div class="container my-4 d-flex align-items-center">
-                                <form asp-controller="ControlCalidad"
-                                      asp-action="RemoverDefecto"
-                                      asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-tipoPie="Derecho"
-                                      asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Reproceso">
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
-                                </form>
-                                <div class="container w-100 d-flex flex-column align-items-center">
-                                    <h6>@defecto.Descripcion </h6>
-
-                                    @if (Model.Hallazgos.Count > 0)
-                                    {
-                                        @if (@Model.Hallazgos.Any(x => x.Defecto.Descripcion == defecto.Descripcion))
-                                        {
-                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">
-                                                @Model.Hallazgos.Where(x => x.Defecto.Descripcion == defecto.Descripcion
-                                                                            && x.TipoPie == TipoPie.Derecho).Count()
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <p class="w-50 font-weight-bold" style="background-color: #ccc">0</p>
-                                    }
-                                    
-
-                                </div>
-                                <form asp-controller="ControlCalidad"
-                                      asp-action="AgregarDefecto"
-                                      asp-route-numeroOrden="@Model.Orden.Numero"
-                                      asp-route-tipoPie="Derecho"
-                                      asp-route-defectoDescripcion="@defecto.Descripcion"
-                                      asp-route-tipoDefecto="Reproceso">
-                                    <button style="font-size: 24px;" class="btn btn-primary btn-sm">+</button>
-                                </form>
-                            </div>
-                        </div>
-                    }
+                   
                 </div>
             </div>
             <div class="row">
@@ -253,10 +292,10 @@
                         <button style="font-size: 24px;" class="btn btn-primary btn-sm">-</button>
                     </form>
                         <div class="container w-100 d-flex flex-column align-items-center">
-                            <h6>Pares de primera calidad</h6>
+                            <h6 style="color: floralwhite">Pares de primera calidad</h6>
                             @if (Model.Primeras.Count > 0)
                             {
-                                <p class="w-50 font-weight-bold" style="background-color: #ccc" >
+                                <p class="w-50 font-weight-bold" style="background-color: #ccc;" >
                                     @Model.Primeras.Count()
                                 </p>
                             }

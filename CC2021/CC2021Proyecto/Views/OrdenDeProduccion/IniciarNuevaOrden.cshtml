@@ -14,24 +14,29 @@
             <div asp-validation-summary="All"></div>
             <div class="container border border-primary align-items-center p-4 my-4">
                 <div class="container mx-auto w-50">
-                    <label for="">Numero de orden:</label>
+                    <label style="color: floralwhite" for="">Numero de orden:</label>
                     <input name="numeroOrden" id="numeroOrden" class="form-control" type="text">
                 </div>
                 <div class="container w-50 justify-content-center my-4">
                     <div >
                         <div class="" style="display: flex; justify-content:space-between;">
-                            <div class="dropdown">
-                                @Html.DropDownListFor(x => x.ColorSelected, new SelectList(Model.Coloress, "Codigo", "Descripcion"), "Color", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle" })
+                            <div class="dropdown" >
+                                @Html.DropDownListFor(x => x.ColorSelected, new SelectList(Model.Coloress, "Codigo", "Descripcion"), "Color", htmlAttributes: new
+                                {
+                                    @class = "btn btn - primary dropdown - toggle" ,
+                                    @style = "color: floralwhite"
+                                })
                                 @for (int i = 0; i < Model.Coloress.Count; i++)
                                 {
                                     <input type="hidden" name="@Model.Coloress[i].Descripcion" value="@Model.Coloress[i].Descripcion" />
                                     <span asp-validation-for="@Model.Coloress[i].Descripcion" class="danger"></span>
 
-
                                 }
                             </div>
                             <div class="dropdown">
-                                @Html.DropDownListFor(x => x.ModeloSelected, new SelectList(Model.Modeloss, "Sku", "Denominacion"), "Modelo", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle" })
+                                @Html.DropDownListFor(x => x.ModeloSelected, new SelectList(Model.Modeloss, "Sku", "Denominacion"), "Modelo", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle",
+                               @style = "color: floralwhite"
+                           })
                                 @for (int i = 0; i < Model.Modeloss.Count; i++)
                                 {
                                     <input type="hidden" name="@Model.Modeloss[i].Denominacion" value="@Model.Modeloss[i].Denominacion" />
@@ -42,7 +47,9 @@
                             </div>
 
                             <div class="dropdown">
-                                @Html.DropDownListFor(x => x.LineaSelected, new SelectList(Model.Lineass, "Id", "Numero"), "Linea", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle" })
+                                @Html.DropDownListFor(x => x.LineaSelected, new SelectList(Model.Lineass, "Id", "Numero"), "Linea", htmlAttributes: new { @class = "btn btn - primary dropdown - toggle",
+                               @style = "color: floralwhite"
+                           })
                                 @for (int i = 0; i < Model.Lineass.Count; i++)
                                 {
                                     <input type="hidden" name="@Model.Lineass[i].Numero" value="@Model.Lineass[i].Numero" />

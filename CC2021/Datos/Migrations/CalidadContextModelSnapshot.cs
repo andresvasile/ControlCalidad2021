@@ -102,7 +102,7 @@ namespace Datos.Migrations
                     b.Property<DateTime>("Hora")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("HorarioTrabajoId")
+                    b.Property<int>("HorarioTrabajoId")
                         .HasColumnType("int");
 
                     b.Property<int>("TipoPie")
@@ -350,7 +350,9 @@ namespace Datos.Migrations
 
                     b.HasOne("Dominio.Entities.HorarioTrabajo", null)
                         .WithMany("Hallazgos")
-                        .HasForeignKey("HorarioTrabajoId");
+                        .HasForeignKey("HorarioTrabajoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Defecto");
 

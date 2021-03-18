@@ -1,7 +1,10 @@
 ﻿@model ModelosListViewModel
 <div class="container text-center mt-4">
-    <h1>Modelos</h1>
-    <div class="container border border-primary overflow-auto h-75">
+    <h1 style="color: floralwhite
+">
+        Modelos
+    </h1>
+    <div class="container border border-primary overflow-auto h-75" style="color: floralwhite">
         <div class="container">
             <ul class="pagination pagination-lg ml-2 mt-2">
                 <li class="page-item">
@@ -26,7 +29,7 @@
                 }
             </div>
         </div>
-        <table class="table">
+        <table class="table" style="color: floralwhite">
             <thead>
                 <tr>
                     <th class="w-25" scope="col">Sku</th>
@@ -44,14 +47,10 @@
                         <td class='text-break'>@modelo.Denominacion</td>
                         <td class='text-break'>@modelo.Objetivo</td>
                         <td class='text-break'>
-                            <a asp-controller="Modelos" asp-action="Edit" asp-route-sku="@modelo.Sku">
-                                <i class="bi bi-pencil"></i>
-                            </a>
+                            <a asp-controller="Modelos" asp-action="Edit" asp-route-sku="@modelo.Sku"><i class="bi bi-pencil" style="color:floralwhite"></i></a>
                         </td>
                         <td class='text-break'>
-                            <a asp-controller="Modelos" asp-action="Delete" asp-route-sku="@modelo.Sku">
-                                <i class="bi bi-dash-circle"></i>
-                            </a>
+                            <a asp-controller="Modelos" asp-action="Delete" asp-route-sku="@modelo.Sku"><i class="bi bi-dash-circle" style="color:floralwhite"></i></a>
                         </td>
                     </tr>
                 }

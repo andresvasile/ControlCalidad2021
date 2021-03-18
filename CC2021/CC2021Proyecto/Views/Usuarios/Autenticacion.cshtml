@@ -1,12 +1,12 @@
 ﻿@model CC2021Proyecto.ValidationClass.UsuarioValidation
 <!-- Login -->
-<div class="container mt-5">
+<div class="container mt-5 pt-5">
     <form asp-action="Autenticacion" method="post" class="form-group text-center">
         <div asp-validation-summary="ModelOnly"></div>
         <div class="row mt-3">
             <div class="col"></div>
             <div class="col">
-                <label asp-for="User">Usuario</label>
+                <label asp-for="User" style="color: floralwhite">Usuario</label>
                 <input asp-for="User" type='text' class='form-control w-1'>
                 <span asp-validation-for="User" class="danger"></span>
             </div>
@@ -16,7 +16,7 @@
         <div class="row mt-3">
             <div class="col"></div>
             <div class="col">
-                <label asp-for="Password">Password</label>
+                <label asp-for="Password"style="color: floralwhite">Password</label>
                 <input asp-for="Password" type='password' class='form-control w-1'>
                 <span asp-validation-for="Password" class="danger"></span>
             </div>

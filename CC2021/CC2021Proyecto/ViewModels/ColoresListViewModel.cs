@@ -9,5 +9,6 @@ namespace CC2021Proyecto.ViewModels
     public class ColoresListViewModel
     {
         public IReadOnlyList<Color> Colores { get; set; }
+        public Usuario Usuario { get; set; }
     }
 }

@@ -347,3 +347,9 @@ D:\RepositorioVS\ControlCalidad2021\CC2021\CC2021Proyecto\obj\Debug\net5.0\CC202
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\ControlCalidad\Index.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\ControlCalidad\_ViewStart.cshtml.g.cs
 C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Shared\_LayoutControlCalidad.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Colores\_ViewStart.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Modelos\_ViewStart.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\OrdenDeProduccion\_ViewStart.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Shared\_LayoutOrden.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Asociar\_ViewStart.cshtml.g.cs
+C:\Users\USUARIO\source\repos\CC\CC2021\CC2021Proyecto\obj\Debug\net5.0\Razor\Views\Shared\_ObservadosIzquierdo.cshtml.g.cs

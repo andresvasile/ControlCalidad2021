@@ -144,22 +144,27 @@ namespace Dominio.Entities
                     Defecto = defecto,
                     Cantidad = cantidad,
                     TipoPie = tipoPie,
+                    HorarioTrabajoId = horarios.Last().Id
 
                 };
                 horarios.Last().Hallazgos.Add(hallaz);
         }
 
 
-        public void RemoverDefecto(TipoPie tipoPie, Empleado usuarioEmpleado, Defecto defecto, List<HorarioTrabajo> horarios)
+        public void RemoverDefecto(TipoPie tipoPie, Empleado usuarioEmpleado
+            , Defecto defecto, List<HorarioTrabajo> horarios
+            , List<Hallazgo> hallazgosARecorrer)
         {
             var h = horarios.Last().Hallazgos.Any(x => x.Defecto == defecto
                                                && x.EmpleadoDeCalidad == usuarioEmpleado
                                                && x.TipoPie==tipoPie);
             if (h)
             {
-                if(horarios.Last().Hallazgos.Any())
+                if(horarios.Last().Hallazgos.Any(x=>x.Defecto.Id==defecto.Id))
                 {
-                    horarios.Last().Hallazgos.RemoveAt(horarios.Last().Hallazgos.Count - 1);
+                    horarios.Last().Hallazgos.RemoveAt(horarios.Last().Hallazgos.
+                        LastIndexOf(hallazgosARecorrer
+                                .FirstOrDefault(x=>x.Defecto.Id == defecto.Id)));
                 }
             }
         }

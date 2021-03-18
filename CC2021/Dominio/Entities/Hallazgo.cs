@@ -16,7 +16,7 @@ namespace Dominio.Entities
         }
         public TipoPie TipoPie{ get; set; }
         public virtual Defecto Defecto{ get; set; }
-        
+        public int HorarioTrabajoId{ get; set; }
 
         public Hallazgo()
         {

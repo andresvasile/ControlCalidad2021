@@ -1,22 +1,24 @@
-﻿<h3>
-    Ocurro un error procesando su solicitud
-</h3>
-<br/>
-<h3>Detalles</h3>
-<div class="alert alert-danger">
-    <h5>Ruta de la excepcion</h5>
-    <hr/>
-    <p>@ViewBag.ExceptionPath</p>
-</div>
+﻿<div class="container"  style="color:floralwhite">
+    <h3  style="color:floralwhite">
+        Ocurro un error procesando su solicitud
+    </h3>
+    <br/>
+    <h3 >Detalles</h3>
+    <div class="alert alert-danger"  style="color:floralwhite">
+        <h5>Ruta de la excepcion</h5>
+        <hr/>
+        <p>@ViewBag.ExceptionPath</p>
+    </div>
 
-<div class="alert alert-danger">
-    <h5>Mensaje de error</h5>
-    <hr />
-    <p>@ViewBag.ExceptionMessage</p>
-</div>
+    <div class="alert alert-danger">
+        <h5>Mensaje de error</h5>
+        <hr />
+        <p>@ViewBag.ExceptionMessage</p>
+    </div>
 
-<div class="alert alert-danger">
-    <h5>Pila</h5>
-    <hr />
-    <p>@ViewBag.StackTrace</p>
+    <div class="alert alert-danger">
+        <h5>Pila</h5>
+        <hr />
+        <p>@ViewBag.StackTrace</p>
+    </div>
 </div>

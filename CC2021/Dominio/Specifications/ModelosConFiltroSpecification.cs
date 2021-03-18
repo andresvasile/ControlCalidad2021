@@ -4,8 +4,8 @@ namespace API.Specifications
 {
     public class ModelosConFiltroSpecification : BaseSpecification<Modelo>
     {
-        public ModelosConFiltroSpecification(string sku)
-        :base(m=>m.Denominacion==sku)
+        public ModelosConFiltroSpecification(string filtro)
+        :base(m=>m.Denominacion.Contains(filtro))
         {
             
         }

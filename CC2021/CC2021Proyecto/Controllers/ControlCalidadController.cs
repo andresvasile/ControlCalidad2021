@@ -35,7 +35,7 @@ namespace CC2021Proyecto.Controllers
            return await Iniciar(numeroOrden);
         }
 
-        public async Task<IActionResult> Iniciar(int numeroOrden, Defecto defecto =null, int cantidadPrimera =-1)
+        public async Task<IActionResult> Iniciar(int numeroOrden, Defecto defectoSeleccionado= null)
         {
             var usuario = await ObtenerUsuario();
 
@@ -59,8 +59,9 @@ namespace CC2021Proyecto.Controllers
                     var turnos = await _unitOfWork.Repository<Turno>().ListAllAsync();
                     var turno = ordenCorrecta.Linea.ValidarTurno(turnos, hora);
 
-                    if (turno != null)
-                    {
+
+                   // if (turno != null)
+                    //{
                         var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
                         var horarios = await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
 
@@ -75,6 +76,11 @@ namespace CC2021Proyecto.Controllers
                             Primeras = ordenCorrecta.Horarios.Last().ParesPrimera
                         };
 
+                        if (defectoSeleccionado != null)
+                        {
+                            defectosListViewModel.def = defectoSeleccionado;
+                        }
+
 
                         if (horarios.Count > 0)
                         {
@@ -82,11 +88,11 @@ namespace CC2021Proyecto.Controllers
                         }
                         
                         return View("IniciarInspeccion", defectosListViewModel);
-                    }
-                    else
-                    {
-                        return RedirectToAction("IniciarAsociacion", "Asociar");
-                    }
+                   // }
+                   // else
+                   // {
+                   //     return RedirectToAction("IniciarAsociacion", "Asociar");
+                   // }
                 }
             }
             return RedirectToAction("IniciarAsociacion","Asociar");
@@ -160,7 +166,7 @@ namespace CC2021Proyecto.Controllers
                     .GetEntityWithSpec(specOrden);
 
 
-                if (ordenCorrecta != null && usuario!= null)
+                if (ordenCorrecta != null && usuario!= null && defecto!= null)
                 {
                     var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
                     var horarios = await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
@@ -186,17 +192,20 @@ namespace CC2021Proyecto.Controllers
                 .GetEntityWithSpec(specOrden);
 
 
-            if (ordenCorrecta != null && usuario != null)
+            if (ordenCorrecta != null && usuario != null && defecto != null)
             {
                 var specHorarios = new HorariosDeOrdenSpecification(ordenCorrecta.Id);
                 var horarios = await _unitOfWork.Repository<HorarioTrabajo>().ListAsync(specHorarios);
 
+                var specHallazgos = new DefectosOrdenSpecification(horarios.Last().Id);
+                var hallazgos = await _unitOfWork.Repository<Hallazgo>().ListAsync(specHallazgos);
+
                 var hora = _unitOfWork.GetHora();
                 var cantidad = 1;
-                ordenCorrecta.RemoverDefecto(tipoPie, usuario.Empleado, defecto, horarios);
+                ordenCorrecta.RemoverDefecto(tipoPie, usuario.Empleado, defecto, horarios, hallazgos);
                 await _unitOfWork.Complete();
             }
-            return await Iniciar(numeroOrden, defecto);
+            return await Iniciar(numeroOrden,defecto);
         }
     }
 }

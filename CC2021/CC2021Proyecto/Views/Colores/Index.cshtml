@@ -1,58 +1,58 @@
 ﻿@model ColoresListViewModel
-
-<div class="container text-center">
-        <h1>Colores</h1>
-        <div class="container border border-primary overflow-auto h-75">
+<div class="container text-center mt-4">
+    <h1 style="color: floralwhite
+">
+        Colores
+    </h1>
+    <div class="container border border-primary overflow-auto h-75" style="color: floralwhite">
+        <div class="container">
+            <ul class="pagination pagination-lg ml-2 mt-2">
+                <li class="page-item">
+                    <a asp-controller="Colores" asp-action="Crear" class="page-link">
+                        <i class="bi bi-plus-circle"></i>
+                    </a>
+                    <span>Agregar</span>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex border border-left-0 border-right-0 border-primary">
             <div class="container">
-                <ul class="pagination pagination-lg ml-2 mt-2">
-                    <li class="page-item">
-                        <a asp-controller="Colores" asp-action="Crear" class="page-link">
-                            <i class="bi bi-plus-circle"></i>
-                        </a>
-                        <span>Agregar</span>
-                    </li>
-                </ul>
+                @using (Html.BeginForm("List", "Colores", FormMethod.Post, new
+                {
+                    @class
+                   = "form-group d-flex align-items-center justify-content-center "
+                }))
+                {
+                    <label class="pr-4">BUSCAR: </label>
+                    <input class="form-control w-25" type="text" name="filtro" id="filtro" />
+                    <button type="submit" class='btn btn-primary ml-2'><i class="bi bi-search"></i></button>
+                }
             </div>
-            <div class="d-flex border border-left-0 border-right-0 border-primary">
-                <div class="container">
-                    @using (Html.BeginForm("List", "Colores", FormMethod.Post,
-                       new { @class = "d-flex py-2 align-items-center justify-content-center" }))
-                    {
-                        <label class="pr-4">BUSCAR: </label>
-                        <input class="form-control w-50" type="text" name="filtro" id="filtro">
-                        <button class="btn btn-primary ml-2"><i class="bi bi-search"></i></button>
-                    }
-
-                </div>
-            </div>
-            
-            <table class="table">
-                <thead>
+        </div>
+        <table class="table" style="color: floralwhite">
+            <thead>
                 <tr>
                     <th class="w-25" scope="col">Codigo</th>
                     <th scope="col">Descripcion</th>
-                    <th> Editar</th>
-                    <th> Eliminar </th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach (var color in Model.Colores)
                 {
                     <tr>
                         <th scope="row">@color.Codigo</th>
-                        <td>@color.Descripcion</td>
-                        <td>
-                            <a asp-controller="Colores"
-                               asp-action="Edit" asp-route-codigoColor="@color.Codigo"><i class="bi bi-pencil"></i></a>
+                        <td class='text-break'>@color.Descripcion</td>
+                        <td class='text-break'>
+                            <a asp-controller="Colores" asp-action="Edit" asp-route-codigoColor="@color.Codigo"><i class="bi bi-pencil" style="color:floralwhite"></i></a>
                         </td>
-                        <td>
-                            <a asp-controller="Colores"
-                               asp-action="Delete" asp-route-codigoColor="@color.Codigo"><i class="bi bi-dash-circle"></i></a>
+                        <td class='text-break'>
+                            <a asp-controller="Colores" asp-action="Delete" asp-route-codigoColor="@color.Codigo"><i class="bi bi-dash-circle" style="color:floralwhite"></i></a>
                         </td>
                     </tr>
                 }
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
-
+</div>

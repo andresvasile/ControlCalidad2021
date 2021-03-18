@@ -10,7 +10,9 @@ using CC2021Proyecto.ViewModels;
 using Datos.Data.Interfaces;
 using Dominio.Entities;
 using Dominio.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CC2021Proyecto.Controllers
 {
@@ -25,23 +27,41 @@ namespace CC2021Proyecto.Controllers
         public async Task<IActionResult> Index()
         {
             var colores = await _unitOfWork.Repository<Color>().ListAllAsync();
-            
-            return View(MapViewModel(colores));
+            var usuario = await ObtenerUsuario();
+            if (usuario == null)
+            {
+                return RedirectToAction("ErrorAlAutenticar", "Usuarios");
+            }
+            return View(MapViewModel(colores, usuario));
         }
 
         [HttpPost]
         public async Task<ActionResult> List(string filtro)
         {
-            var colores = await _unitOfWork.Repository<Color>().ListAllAsync(); ;
+            var colores = await _unitOfWork.Repository<Color>().ListAllAsync();
+            var usuario = await ObtenerUsuario();
             if (!string.IsNullOrEmpty(filtro))
             {
                 var spec = new ColoresConFiltroSpecification(filtro);
                 colores = await _unitOfWork.Repository<Color>().ListAsync(spec);
+            }
+            return View(MapViewModel(colores, usuario));
+        }
+        private async Task<Usuario> ObtenerUsuario()
+        {
+            var usuarioSesion = HttpContext.Session.GetString("SessionUser");
+            if (!string.IsNullOrEmpty(usuarioSesion))
+            {
+                var sessionUser = JsonConvert.DeserializeObject<Usuario>(usuarioSesion);
 
-                return View(MapViewModel(colores));
+                var specUsuario = new ValidarEmpleadoSpecification(sessionUser.User);
+                var usuario = await _unitOfWork.Repository<Usuario>().GetEntityWithSpec(specUsuario);
+
+                return usuario;
             }
 
-            return View(MapViewModel(colores));
+            return null;
+
         }
 
         public IActionResult Crear()
@@ -138,12 +158,17 @@ namespace CC2021Proyecto.Controllers
             return RedirectToAction("Index");
         }
 
-        private static ColoresListViewModel MapViewModel(IReadOnlyList<Color> colores)
+        private static ColoresListViewModel MapViewModel(IReadOnlyList<Color> colores, Usuario usuario)
         {
-            return new ColoresListViewModel
+            if (usuario != null && colores!=null)
             {
-                Colores = colores
-            };
+                return new ColoresListViewModel
+                {
+                    Colores = colores,
+                    Usuario = usuario
+                };
+            }
+            return new ColoresListViewModel();
         }
     }
 }
